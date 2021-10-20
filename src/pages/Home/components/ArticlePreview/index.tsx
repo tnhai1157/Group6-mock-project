@@ -1,29 +1,57 @@
 import React from "react";
+import { postFavorite } from "./api";
 
 export default function ArticlePreview({ feeds }: any) {
+  const token = window.localStorage.getItem("jwtToken");
+  const handleLike = (slug: string) => {
+    console.log(slug);
+    // console.log(token);
+    // postFavorite(slug, token).then((res: any) => {
+    //   console.log(res.data);
+    // });
+  };
   return (
     <div>
       {feeds && feeds.length > 0 ? (
         feeds.map((feed: any) => (
-          <div className="article-preview">
+          <div className="article-preview" key={feed?.slug}>
             <div className="article-meta">
               <a href="profile.html">
-                <img src="http://i.imgur.com/Qr71crq.jpg" />
+                <img
+                  src={
+                    feed?.author?.image
+                      ? feed.author.image
+                      : "https://static.productionready.io/images/smiley-cyrus.jpg"
+                  }
+                />
               </a>
               <div className="info">
                 <a href="" className="author">
-                  Eric Simons
+                  {feed?.author?.username}
                 </a>
-                <span className="date">January 20th</span>
+                <span className="date">{feed?.updatedAt}</span>
               </div>
-              <button className="btn btn-outline-primary btn-sm pull-xs-right">
-                <i className="ion-heart"></i> 29
+              <button
+                className="btn btn-outline-primary btn-sm pull-xs-right"
+                onClick={() => handleLike(feed?.slug)}
+              >
+                <i className="ion-heart"></i> {feed?.favoritesCount}
               </button>
             </div>
             <a href="" className="preview-link">
-              <h1>How to build webapps that scale</h1>
-              <p>This is the description for the post.</p>
+              <h1>{feed?.title}</h1>
+              <p>{feed?.description}</p>
               <span>Read more...</span>
+              <ul className="tag-list">
+                {feed.tagList?.map((tag: any) => (
+                  <li
+                    className="tag-default tag-pill tag-outline ng-binding ng-scope"
+                    ng-repeat="tag in $ctrl.article.tagList"
+                  >
+                    {tag}
+                  </li>
+                ))}
+              </ul>
             </a>
           </div>
         ))
