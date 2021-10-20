@@ -6,7 +6,7 @@ import { useSelector } from "react-redux";
 import Tags from "./components/Tags";
 import { getTags } from "./components/Tags/apis";
 
-export default function Home() {
+export default function Home({ userToken }: { userToken: boolean }) {
   const [feeds, setFeeds] = useState();
   const [tags, setTags] = useState();
   const user = useSelector((state: any) => state.user.data.user);
@@ -42,16 +42,20 @@ export default function Home() {
           <div className="col-md-9">
             <div className="feed-toggle">
               <ul className="nav nav-pills outline-active">
-                <li className="nav-item">
-                  <NavLink
-                    className="nav-link"
-                    to=""
-                    activeClassName="selected"
-                    onClick={handleClickYourFeed}
-                  >
-                    <div>Your feed</div>
-                  </NavLink>
-                </li>
+                {userToken ? (
+                  <li className="nav-item">
+                    <NavLink
+                      className="nav-link"
+                      to=""
+                      activeClassName="selected"
+                      onClick={handleClickYourFeed}
+                    >
+                      Your feed
+                    </NavLink>
+                  </li>
+                ) : (
+                  <li></li>
+                )}
                 <li className="nav-item">
                   <NavLink
                     className="nav-link"
