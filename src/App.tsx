@@ -39,22 +39,22 @@ function App() {
         </Route>
         <GuardedRoute
           path="/editor"
-          auth={loginState}
+          auth={window.localStorage.getItem("jwtToken")}
           Component={Editor}
         ></GuardedRoute>
         <GuardedRoute
           path="/settings"
-          auth={loginState}
+          auth={window.localStorage.getItem("jwtToken")}
           Component={Settings}
         ></GuardedRoute>
         <GuardedRoute
           path="/profile"
-          auth={loginState}
+          auth={window.localStorage.getItem("jwtToken")}
           Component={Profile}
         ></GuardedRoute>
         <GuardedRoute
           path="/article"
-          auth={loginState}
+          auth={window.localStorage.getItem("jwtToken")}
           Component={Articles}
         ></GuardedRoute>
       </Switch>

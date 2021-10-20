@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Link, NavLink, Switch, Route } from "react-router-dom";
-import { feedArticles, listArticles } from "../../apis";
+import { yourArticles, globalArticles } from "./apis/index";
 import ArticlePreview from "./components/ArticlePreview";
 import { useSelector } from "react-redux";
 import Tags from "./components/Tags";
@@ -9,24 +9,22 @@ import { getTags } from "./components/Tags/apis";
 export default function Home({ userToken }: { userToken: boolean }) {
   const [feeds, setFeeds] = useState();
   const [tags, setTags] = useState();
-  const user = useSelector((state: any) => state.user.data.user);
-
   const token = window.localStorage.getItem("jwtToken");
 
-  const handleClickYourFeed = () => {
-    feedArticles(token).then((res: any) => {
-      setFeeds(res.data.articles);
-    });
-  };
+  const handleClickYourFeed = () => {};
 
   const handleClickGlobalFeed = () => {
-    listArticles(token).then((res: any) => {
+    globalArticles(token).then((res: any) => {
       setFeeds(res.data.articles);
+      console.log(res.data.articles);
     });
   };
 
   useEffect(() => {
-    getTags().then((res: any) => setTags(res.data.tags));
+    getTags().then((res: any) => {
+      setTags(res.data.tags);
+    });
+    handleClickGlobalFeed();
   }, []);
 
   return (
