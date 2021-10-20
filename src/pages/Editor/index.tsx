@@ -1,19 +1,69 @@
 import React, { useEffect, useState } from "react";
 import { withFormik } from "formik";
 import * as Yup from "yup";
+import TagList from "./components/TagList";
 
 function Editor(props: any) {
-  // console.log("abc");
+  const [input, setInput] = useState("");
+  const [tags, setTags] = useState<any>([]);
+  const [isKeyReleased, setIsKeyReleased] = useState(false);
+
   const handleSubmit = (e: any) => {
-    console.log(e);
+    e.preventDefault();
+    console.log(props.values, tags);
   };
+
+  const onKeyDown = (e: any) => {
+    const { key } = e;
+    const trimmedInput = input.trim();
+
+    if (
+      key === "Enter" &&
+      trimmedInput.length &&
+      !tags.includes(trimmedInput)
+    ) {
+      e.preventDefault();
+      setTags((prevState: any) => [...prevState, trimmedInput]);
+      setInput("");
+    }
+
+    if (key === "Backspace" && !input.length && tags.length) {
+      e.preventDefault();
+      const tagsCopy = [...tags];
+      const poppedTag = tagsCopy.pop();
+
+      setTags(tagsCopy);
+      setInput(poppedTag);
+    }
+
+    setIsKeyReleased(false);
+  };
+
+  const onChange = (e: any) => {
+    const { value } = e.target;
+    setInput(value);
+  };
+
+  const handlePressSpaceTags = (e: any) => {
+    console.log({ key: e.key });
+    if (e.key === " ") {
+      // setTags((prevState: any) => [...prevState, props.values.tags]);
+      console.log({ inputTag: props.values.tags });
+      props.values.tags = "";
+    }
+  };
+
+  const onKeyUp = () => {
+    setIsKeyReleased(true);
+  };
+
   return (
     <div className="editor-page">
       <div className="container page">
         <div className="row">
           <div className="col-md-10 offset-md-1 col-xs-12">
-            <form>
-              <fieldset onSubmit={handleSubmit}>
+            <form onSubmit={handleSubmit}>
+              <fieldset>
                 <fieldset className="form-group">
                   <input
                     type="text"
@@ -48,12 +98,16 @@ function Editor(props: any) {
                     type="text"
                     className="form-control"
                     placeholder="Enter tags"
+                    value={input}
+                    onKeyDown={onKeyDown}
+                    onChange={onChange}
+                    onKeyUp={onKeyUp}
                   />
-                  <div className="tag-list"></div>
+                  <TagList tags={tags} setTags={setTags} />
                 </fieldset>
                 <button
                   className="btn btn-lg pull-xs-right btn-primary"
-                  type="button"
+                  // onClick={handleSubmit}
                 >
                   Publish Article
                 </button>
@@ -72,7 +126,6 @@ const FormikEditor = withFormik({
       title: "",
       description: "",
       content: "",
-      tag: [],
     };
   },
   validationSchema: Yup.object().shape({
