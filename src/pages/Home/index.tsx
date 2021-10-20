@@ -16,7 +16,7 @@ export default function Home({ userToken }: { userToken: boolean }) {
   const handleClickGlobalFeed = () => {
     globalArticles(token).then((res: any) => {
       setFeeds(res.data.articles);
-      console.log(res.data.articles);
+      // console.log(res.data.articles);
     });
   };
 

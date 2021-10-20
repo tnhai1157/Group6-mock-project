@@ -20,6 +20,13 @@ export default function userReducer(state = INIT_STATE.user, action: any) {
         isLoading: false,
       };
 
+    case getType(getUser.deleteUser):
+      return {
+        ...state,
+        isLoading: false,
+        data: {},
+      };
+
     default:
       return state;
   }

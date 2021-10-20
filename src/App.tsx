@@ -15,13 +15,19 @@ import GuardedRoute from "./components/Route/GaurdRoute";
 
 function App() {
   const user = useSelector((state: any) => state.user.data.user);
+  console.log(user);
   const [loginState, setLoginState] = useState<boolean>(false);
+
   useEffect(() => {
     if (user) {
       window.localStorage.setItem("jwtToken", user.token);
     }
     const userToken = window.localStorage.getItem("jwtToken");
-    if (userToken) setLoginState(true);
+    if (userToken) {
+      setLoginState(true);
+    } else {
+      setLoginState(false);
+    }
   }, [user]);
 
   return (
