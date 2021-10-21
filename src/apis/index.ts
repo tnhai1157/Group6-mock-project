@@ -20,10 +20,6 @@ export const listArticles = (token: any) =>
 
 export const userByToken = (payload: any) =>
   axios.get(`${URL}/api/user`, {
-    // body: {
-    //   "Access-Control-Allow-Origin": "*",
-    //   "Access-Control-Allow-Credentials": true,
-    // },
     headers: {
       "Content-Type": "application/json",
       Authorization: `Bearer ${payload.token}`,
