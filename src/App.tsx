@@ -65,11 +65,9 @@ function App() {
           auth={window.localStorage.getItem("jwtToken")}
           Component={Profile}
         ></GuardedRoute>
-        <GuardedRoute
-          path="/article"
-          auth={window.localStorage.getItem("jwtToken")}
-          Component={Articles}
-        ></GuardedRoute>
+        <Route path="/article">
+          <Articles />
+        </Route>
       </Switch>
       <Footer />
     </Router>
