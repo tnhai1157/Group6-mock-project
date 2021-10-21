@@ -32,7 +32,7 @@ export default function Header({ userToken }: { userToken: boolean }) {
               </NavLink>
             </li>
             <li className="nav-item">
-              <NavLink className="nav-link" to="/profile">
+              <NavLink className="nav-link" to={`/${user.username}`}>
                 <i className="ion-gear-a"></i>&nbsp;
                 {user?.username}
               </NavLink>

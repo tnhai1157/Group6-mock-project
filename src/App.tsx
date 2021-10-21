@@ -22,47 +22,27 @@ import { userByToken } from "./apis";
 
 function App() {
   const dispatch = useDispatch();
-  const user = useSelector((state: any) => state.user.data.user);
+  const user = useSelector((state: any) => state.user.data);
   const [loginState, setLoginState] = useState<boolean>(false);
+  const token = window.localStorage.getItem("jwtToken");
 
   useEffect(() => {
-    if (user) {
-      window.localStorage.setItem("jwtToken", user.token);
-    }
-    const userToken = window.localStorage.getItem("jwtToken");
-
-    if (userToken) {
-      setLoginState(true);
-      userByToken(userToken).then((res: any) => {
+    if (token && !user?.username) {
+      userByToken(token).then((res: any) => {
         const user = res.data.user;
         dispatch(saveUserInStore.saveUserInStoreSuccess(user));
       });
+    }
+  }, [token, user, dispatch]);
+
+  useEffect(() => {
+    const token = window.localStorage.getItem("jwtToken");
+    if (token) {
+      setLoginState(true);
     } else {
       setLoginState(false);
     }
-  }, [user, dispatch]);
-
-  // let token = window.localStorage.getItem("jwtToken");
-  // console.log({ token });
-
-  // useEffect(() => {
-  //   if (token) {
-  //     userByToken(token).then((res: any) => {
-  //       const user = res.data.user;
-  //       dispatch(saveUserInStore.saveUserInStoreSuccess(user));
-  //     });
-  //     setLoginState(true);
-  //   } else {
-  //     setLoginState(false);
-  //   }
-  // }, [token, dispatch]);
-
-  // useEffect(() => {
-  //   if (user) {
-  //     window.localStorage.setItem("jwtToken", user.token);
-  //   }
-  //   token = window.localStorage.getItem("jwtToken");
-  // }, [user]);
+  }, [user]);
 
   return (
     <Router>
@@ -94,7 +74,8 @@ function App() {
           Component={Settings}
         ></GuardedRoute>
         <GuardedRoute
-          path="/profile"
+          // path={`/${user?.username}`}
+          path={`/${user.username}`}
           auth={window.localStorage.getItem("jwtToken")}
           Component={Profile}
         ></GuardedRoute>

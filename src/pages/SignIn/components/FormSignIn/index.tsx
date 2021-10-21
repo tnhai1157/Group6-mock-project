@@ -24,6 +24,7 @@ function FormLogin(props: any) {
         const user = res.data.user;
         history.push("/");
         dispatch(saveUserInStore.saveUserInStoreSuccess({ user }));
+        window.localStorage.setItem("jwtToken", user.token);
       })
       .catch((e) => setError(true));
     // dispatch(
