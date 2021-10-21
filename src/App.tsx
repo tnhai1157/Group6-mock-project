@@ -8,18 +8,13 @@ import SignIn from "./pages/SignIn";
 import Profile from "./pages/Profile";
 import Settings from "./pages/Settings";
 import Articles from "./pages/Articles";
-<<<<<<< HEAD
-import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
-=======
 import {
   BrowserRouter as Router,
   Switch,
   Route,
   Redirect,
 } from "react-router-dom";
-import { useSelector } from "react-redux";
->>>>>>> main
+import { useDispatch, useSelector } from "react-redux";
 import SignUp from "./pages/SignUp";
 import GuardedRoute from "./components/Route/GaurdRoute";
 import { getUserByToken } from "./redux/actions";
