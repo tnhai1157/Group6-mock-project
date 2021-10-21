@@ -1,65 +1,105 @@
+import { useEffect, useState } from "react";
+import { Route, useHistory, useParams } from "react-router";
+import { NavLink } from "react-router-dom";
+import Editor from "../Editor";
+import { deleteArticle, getArticle } from "./apis";
+
 export default function Articles() {
+  const { slug }: any = useParams();
+  const token = window.localStorage.getItem("jwtToken");
+  const [article, setArticle] = useState<any>();
+  const [checkAuthor, setCheckAuthor] = useState(false);
+  const history = useHistory();
+  useEffect(() => {
+    getArticle(slug).then((res: any) => {
+      setArticle(res.data.article);
+    });
+  }, [slug]);
+  const handleDelete = () => {
+    deleteArticle(slug, token).then((res: any) => {
+      history.push("");
+    });
+  };
   return (
     <div className="article-page">
       <div className="banner">
         <div className="container">
-          <h1>How to build webapps that scale</h1>
+          <h1>{article?.title}</h1>
           <div className="article-meta">
-            <a href="">
-              <img src="http://i.imgur.com/Qr71crq.jpg" />
-            </a>
+            <img
+              src={
+                article?.author?.image
+                  ? article.author.image
+                  : "https://static.productionready.io/images/smiley-cyrus.jpg"
+              }
+            />
             <div className="info">
-              <a href="" className="author">
-                Eric Simons
-              </a>
-              <span className="date">January 20th</span>
+              <NavLink to={"/profile/" + article?.author?.username}>
+                <h5>{article?.author?.username}</h5>
+              </NavLink>
+              <span className="date">{article?.updatedAt}</span>
             </div>
-            <button className="btn btn-sm btn-outline-secondary">
-              <i className="ion-plus-round"></i>
-              &nbsp; Follow Eric Simons <span className="counter">(10)</span>
-            </button>
-            &nbsp;&nbsp;
-            <button className="btn btn-sm btn-outline-primary">
-              <i className="ion-heart"></i>
-              &nbsp; Favorite Post <span className="counter">(29)</span>
-            </button>
+            {token ? (
+              <div>
+                {checkAuthor ? (
+                  <div>
+                    <NavLink to={"/editor/" + article?.slug}>
+                      <button className="btn btn-sm btn-outline-secondary">
+                        <i className="ion-edit"></i>
+                        &nbsp; Edit Article
+                      </button>
+                    </NavLink>
+                    &nbsp;&nbsp;
+                    <button
+                      className="btn btn-sm btn-outline-danger"
+                      onClick={handleDelete}
+                    >
+                      <i className="ion-trash-a"></i>
+                      &nbsp; Delete Article
+                    </button>
+                  </div>
+                ) : (
+                  <div>
+                    <button className="btn btn-sm btn-outline-secondary">
+                      <i className="ion-plus-round"></i>
+                      &nbsp; Follow {article?.author?.username}
+                      <span className="counter"></span>
+                    </button>
+                    &nbsp;&nbsp;
+                    <button className="btn btn-sm btn-outline-primary">
+                      <i className="ion-heart"></i>
+                      &nbsp; Favorite Post{" "}
+                      <span className="counter">
+                        ({article?.favoritesCount})
+                      </span>
+                    </button>
+                  </div>
+                )}
+              </div>
+            ) : (
+              <div></div>
+            )}
           </div>
         </div>
       </div>
       <div className="container page">
         <div className="row article-content">
           <div className="col-md-12">
-            <p>
-              Web development technologies have evolved at an incredible clip
-              over the past few years.
-            </p>
-            <h2 id="introducing-ionic">Introducing RealWorld.</h2>
-            <p>It's a great solution for learning how other frameworks work.</p>
+            <p>{article?.body}</p>
           </div>
+        </div>
+        <div className="tag-list">
+          {article?.tagList?.map((tag: any) => (
+            <span
+              key={tag}
+              ng-repeat="tag in $ctrl.article.tagList"
+              className="tag-default tag-pill ng-binding ng-scope"
+            >
+              {tag}
+            </span>
+          ))}
         </div>
         <hr />
-        <div className="article-actions">
-          <div className="article-meta">
-            <a href="profile.html">
-              <img src="http://i.imgur.com/Qr71crq.jpg" />
-            </a>
-            <div className="info">
-              <a href="" className="author">
-                Eric Simons
-              </a>
-              <span className="date">January 20th</span>
-            </div>
-            <button className="btn btn-sm btn-outline-secondary">
-              <i className="ion-plus-round"></i>
-              &nbsp; Follow Eric Simons <span className="counter">(10)</span>
-            </button>
-            &nbsp;
-            <button className="btn btn-sm btn-outline-primary">
-              <i className="ion-heart"></i>
-              &nbsp; Favorite Post <span className="counter">(29)</span>
-            </button>
-          </div>
-        </div>
         <div className="row">
           <div className="col-xs-12 col-md-8 offset-md-2">
             <form className="card comment-form">
@@ -127,6 +167,9 @@ export default function Articles() {
           </div>
         </div>
       </div>
+      {/* <Route path="/editor/:slug">
+        <Editor />
+      </Route> */}
     </div>
   );
 }

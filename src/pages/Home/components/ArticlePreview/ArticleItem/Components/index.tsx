@@ -5,8 +5,20 @@ import { deleteFavorite, postFavorite } from "../apis";
 export default function ArticleItem({ feed }: any) {
   const token = window.localStorage.getItem("jwtToken");
   const [likeCount, setLikeCount] = useState<number>(feed?.favoritesCount);
+  const [likeState, setLikeState] = useState<boolean>(feed?.favorited);
   const handleLike = (slug: string) => {
     if (token) {
+      if (likeState) {
+        deleteFavorite(token, slug).then((res: any) => {
+          setLikeCount(res.data.article?.favoritesCount);
+          setLikeState(false);
+        });
+      } else {
+        postFavorite(token, slug).then((res: any) => {
+          setLikeCount(res.data.article?.favoritesCount);
+          setLikeState(true);
+        });
+      }
       // postFavorite(token, slug).then((res: any) => {
       //   setLikeCount(res.data.article?.favoritesCount);
       // });

@@ -5,7 +5,7 @@ const GuardedRoute = ({ Component, auth, ...rest }: any) => (
   <Route
     {...rest}
     render={(props) =>
-      auth.length > 0 ? <Component /> : <Redirect to="/" exact />
+      auth?.length > 0 ? <Component /> : <Redirect to="/" exact />
     }
   />
 );
