@@ -156,6 +156,7 @@ export default function Articles() {
                   <img
                     src="http://i.imgur.com/Qr71crq.jpg"
                     className="comment-author-img"
+                    alt=""
                   />
                 </a>
                 &nbsp;

@@ -5,7 +5,6 @@ import { useHistory } from "react-router";
 import * as Yup from "yup";
 import { saveUserInStore } from "../../../../redux/actions";
 import { updateUser } from "../../apis";
-import * as actions from "../../redux/actions";
 
 function FormSettings(props: any) {
   const dispatch = useDispatch();

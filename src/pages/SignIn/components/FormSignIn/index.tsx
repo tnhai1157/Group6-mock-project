@@ -1,9 +1,8 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { withFormik } from "formik";
 import * as Yup from "yup";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { useHistory } from "react-router-dom";
-import { getUser } from "../../redux/actions";
 import { postUsersSignIn } from "../../apis";
 import { saveUserInStore } from "../../../../redux/actions";
 
@@ -11,10 +10,6 @@ function FormLogin(props: any) {
   const dispatch = useDispatch();
   const history = useHistory();
   const [error, setError] = useState(false);
-
-  // useEffect(() => {
-  //   if (user) history.push("/");
-  // }, [user, history]);
 
   const handleSubmit = (e: any) => {
     e.preventDefault();
@@ -27,12 +22,6 @@ function FormLogin(props: any) {
         window.localStorage.setItem("jwtToken", user.token);
       })
       .catch((e) => setError(true));
-    // dispatch(
-    //   getUser.getUserRequest({
-    //     email: email,
-    //     password: password,
-    //   })
-    // );
   };
 
   return (
@@ -62,7 +51,12 @@ function FormLogin(props: any) {
           onChange={props.handleChange}
         />
       </fieldset>
-      <button className="btn btn-lg btn-primary pull-xs-right">Sign in</button>
+      <button
+        className="btn btn-lg btn-primary pull-xs-right"
+        disabled={!props.isValid || !props.values.email}
+      >
+        Sign in
+      </button>
     </form>
   );
 }

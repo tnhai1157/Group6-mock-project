@@ -3,8 +3,6 @@ import { withFormik } from "formik";
 import * as Yup from "yup";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
-import { getUser } from "../../../SignIn/redux/actions";
-import { getUserSignUp } from "../../redux/actions";
 import { postUserSignUp } from "../../apis";
 import { saveUserInStore } from "../../../../redux/actions";
 
@@ -12,10 +10,6 @@ function FormSignUp(props: any) {
   const dispatch = useDispatch();
   const history = useHistory();
   const [error, setError] = useState();
-
-  // useEffect(() => {
-  //   if (user) history.push("/");
-  // }, [user, history]);
 
   const handleSubmit = (e: any) => {
     e.preventDefault();
@@ -32,14 +26,6 @@ function FormSignUp(props: any) {
         const errorObject = { ...e.response.data.errors };
         setError(errorObject);
       });
-
-    // dispatch(
-    //   getUserSignUp.getUserSignUpRequest({
-    //     username: username,
-    //     email: email,
-    //     password: password,
-    //   })
-    // );
   };
 
   return (
@@ -87,7 +73,12 @@ function FormSignUp(props: any) {
           onChange={props.handleChange}
         />
       </fieldset>
-      <button className="btn btn-lg btn-primary pull-xs-right">Sign up</button>
+      <button
+        className="btn btn-lg btn-primary pull-xs-right"
+        disabled={!props.isValid || !props.values.email}
+      >
+        Sign up
+      </button>
     </form>
   );
 }
