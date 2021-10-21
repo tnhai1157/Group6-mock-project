@@ -19,13 +19,15 @@ export default function Tags({
         <div className="tag-list">
           {tags && tags.length > 0 ? (
             tags.map((tag: any) => (
-              <Link
-                to=""
-                className="tag-pill tag-default"
-                onClick={() => handleClickTag(tag)}
-              >
-                {tag}
-              </Link>
+              <span key={tag}>
+                <Link
+                  to=""
+                  className="tag-pill tag-default"
+                  onClick={() => handleClickTag(tag)}
+                >
+                  {tag}
+                </Link>
+              </span>
             ))
           ) : (
             <p>No tags are here... yet.</p>
