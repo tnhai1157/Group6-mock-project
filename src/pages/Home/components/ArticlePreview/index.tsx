@@ -1,11 +1,11 @@
 import React from "react";
+import { NavLink } from "react-router-dom";
 import { postFavorite } from "./api";
 
 export default function ArticlePreview({ feeds }: any) {
   const token = window.localStorage.getItem("jwtToken");
   const handleLike = (slug: string) => {
     console.log(slug);
-    // console.log(token);
     // postFavorite(slug, token).then((res: any) => {
     //   console.log(res.data);
     // });
@@ -38,7 +38,7 @@ export default function ArticlePreview({ feeds }: any) {
                 <i className="ion-heart"></i> {feed?.favoritesCount}
               </button>
             </div>
-            <a href="" className="preview-link">
+            <NavLink to="" className="preview-link">
               <h1>{feed?.title}</h1>
               <p>{feed?.description}</p>
               <span>Read more...</span>
@@ -52,7 +52,7 @@ export default function ArticlePreview({ feeds }: any) {
                   </li>
                 ))}
               </ul>
-            </a>
+            </NavLink>
           </div>
         ))
       ) : (
