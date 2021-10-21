@@ -2,15 +2,19 @@ import React, { useEffect, useState } from "react";
 import { withFormik } from "formik";
 import * as Yup from "yup";
 import TagList from "./components/TagList";
+import { postArticle } from "./apis";
 
 function Editor(props: any) {
   const [input, setInput] = useState("");
   const [tags, setTags] = useState<any>([]);
   const [isKeyReleased, setIsKeyReleased] = useState(false);
-
+  const token = window.localStorage.getItem("jwtToken");
   const handleSubmit = (e: any) => {
     e.preventDefault();
     console.log(props.values, tags);
+    postArticle(props.values, tags, token).then((res: any) => {
+      console.log(res.data);
+    });
   };
 
   const onKeyDown = (e: any) => {
@@ -65,6 +69,7 @@ function Editor(props: any) {
             <form onSubmit={handleSubmit}>
               <fieldset>
                 <fieldset className="form-group">
+                  <p className="error-messages">{props.errors.title}</p>
                   <input
                     type="text"
                     className="form-control form-control-lg"
@@ -75,6 +80,7 @@ function Editor(props: any) {
                   />
                 </fieldset>
                 <fieldset className="form-group">
+                  <p className="error-messages">{props.errors.description}</p>
                   <input
                     type="text"
                     className="form-control"
@@ -85,6 +91,7 @@ function Editor(props: any) {
                   />
                 </fieldset>
                 <fieldset className="form-group">
+                  <p className="error-messages">{props.errors.content}</p>
                   <textarea
                     className="form-control"
                     placeholder="Write your article (in markdown)"
@@ -108,6 +115,7 @@ function Editor(props: any) {
                 <button
                   className="btn btn-lg pull-xs-right btn-primary"
                   // onClick={handleSubmit}
+                  disabled={!props.isValid || !props.values.title}
                 >
                   Publish Article
                 </button>

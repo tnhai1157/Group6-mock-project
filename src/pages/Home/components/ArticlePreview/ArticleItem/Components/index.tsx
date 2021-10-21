@@ -1,0 +1,61 @@
+import { useState } from "react";
+import { NavLink } from "react-router-dom";
+import { deleteFavorite, postFavorite } from "../apis";
+
+export default function ArticleItem({ feed }: any) {
+  const token = window.localStorage.getItem("jwtToken");
+  const [likeCount, setLikeCount] = useState<number>(feed?.favoritesCount);
+  const handleLike = (slug: string) => {
+    if (token) {
+      // postFavorite(token, slug).then((res: any) => {
+      //   setLikeCount(res.data.article?.favoritesCount);
+      // });
+      // deleteFavorite(token, slug).then((res: any) => {
+      //   setLikeCount(res.data.article?.favoritesCount);
+      // });
+    }
+  };
+  return (
+    <div className="article-preview">
+      <div className="article-meta">
+        <img
+          src={
+            feed?.author?.image
+              ? feed.author.image
+              : "https://static.productionready.io/images/smiley-cyrus.jpg"
+          }
+        />
+        <div className="info">
+          <NavLink to={"/profile/" + feed?.author?.username}>
+            <h5>{feed?.author?.username}</h5>
+          </NavLink>
+          <span className="date">{feed?.updatedAt}</span>
+        </div>
+        <button
+          className="btn btn-outline-primary btn-sm pull-xs-right"
+          onClick={() => handleLike(feed?.slug)}
+        >
+          <i className="ion-heart"></i> {likeCount}
+        </button>
+      </div>
+      <div className="preview-link">
+        <h1>{feed?.title}</h1>
+        <p>{feed?.description}</p>
+        <NavLink to={"/article/" + feed?.slug} className="preview-link">
+          Read more...
+        </NavLink>
+        <ul className="tag-list">
+          {feed.tagList?.map((tag: any) => (
+            <li
+              key={tag}
+              className="tag-default tag-pill tag-outline ng-binding ng-scope"
+              ng-repeat="tag in $ctrl.article.tagList"
+            >
+              {tag}
+            </li>
+          ))}
+        </ul>
+      </div>
+    </div>
+  );
+}

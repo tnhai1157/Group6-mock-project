@@ -1,22 +1,33 @@
-import React, { useEffect, useState } from "react";
-import { Link, NavLink, Switch, Route } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { NavLink } from "react-router-dom";
 import { yourArticles, globalArticles } from "./apis/index";
 import ArticlePreview from "./components/ArticlePreview";
-import { useSelector } from "react-redux";
 import Tags from "./components/Tags";
-import { getTags } from "./components/Tags/apis";
+import { getArticleByTag, getTags } from "./components/Tags/apis";
 
 export default function Home({ userToken }: { userToken: boolean }) {
   const [feeds, setFeeds] = useState();
   const [tags, setTags] = useState();
+  const [tagName, setTagName] = useState("");
   const token = window.localStorage.getItem("jwtToken");
 
-  const handleClickYourFeed = () => {};
+  const handleClickYourFeed = () => {
+    setTagName("");
+    yourArticles(token).then((res: any) => {
+      setFeeds(res.data.articles);
+    });
+  };
 
   const handleClickGlobalFeed = () => {
-    globalArticles(token).then((res: any) => {
+    globalArticles().then((res: any) => {
       setFeeds(res.data.articles);
-      console.log(res.data.articles);
+    });
+    setTagName("");
+  };
+  const getArticlesByTag = (tag: string) => {
+    getArticleByTag(tag).then((res: any) => {
+      setFeeds(res.data.articles);
+      setTagName(tag);
     });
   };
 
@@ -64,11 +75,24 @@ export default function Home({ userToken }: { userToken: boolean }) {
                     Global Feed
                   </NavLink>
                 </li>
+                {tagName ? (
+                  <li className="nav-item">
+                    <NavLink
+                      className="nav-link"
+                      to=""
+                      activeClassName="selected"
+                    >
+                      # {tagName}
+                    </NavLink>
+                  </li>
+                ) : (
+                  <li></li>
+                )}
               </ul>
             </div>
             <ArticlePreview feeds={feeds} />
           </div>
-          <Tags tags={tags} />
+          <Tags tags={tags} getArticlesByTag={getArticlesByTag} />
         </div>
       </div>
     </div>
