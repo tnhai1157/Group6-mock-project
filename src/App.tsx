@@ -8,7 +8,12 @@ import SignIn from "./pages/SignIn";
 import Profile from "./pages/Profile";
 import Settings from "./pages/Settings";
 import Articles from "./pages/Articles";
-import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route,
+  Redirect,
+} from "react-router-dom";
 import { useSelector } from "react-redux";
 import SignUp from "./pages/SignUp";
 import GuardedRoute from "./components/Route/GaurdRoute";
@@ -38,7 +43,13 @@ function App() {
           <SignUp />
         </Route>
         <GuardedRoute
+          exact
           path="/editor"
+          auth={window.localStorage.getItem("jwtToken")}
+          Component={Editor}
+        ></GuardedRoute>
+        <GuardedRoute
+          path="/editor/:slug"
           auth={window.localStorage.getItem("jwtToken")}
           Component={Editor}
         ></GuardedRoute>
@@ -52,9 +63,10 @@ function App() {
           auth={window.localStorage.getItem("jwtToken")}
           Component={Profile}
         ></GuardedRoute>
-        <Route path="/article">
+        <Route path="/article/:slug">
           <Articles />
         </Route>
+        <Redirect to="/" />
       </Switch>
       <Footer />
     </Router>

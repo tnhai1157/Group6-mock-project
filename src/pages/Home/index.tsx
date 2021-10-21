@@ -15,19 +15,22 @@ export default function Home({ userToken }: { userToken: boolean }) {
     setTagName("");
     yourArticles(token).then((res: any) => {
       setFeeds(res.data.articles);
+      console.log(res.data.articles);
     });
   };
 
   const handleClickGlobalFeed = () => {
-    globalArticles().then((res: any) => {
+    globalArticles(token).then((res: any) => {
       setFeeds(res.data.articles);
+      console.log(res.data.articles);
     });
     setTagName("");
   };
   const getArticlesByTag = (tag: string) => {
-    getArticleByTag(tag).then((res: any) => {
+    getArticleByTag(tag, token).then((res: any) => {
       setFeeds(res.data.articles);
       setTagName(tag);
+      console.log(res.data.articles);
     });
   };
 

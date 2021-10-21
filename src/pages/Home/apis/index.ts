@@ -10,10 +10,10 @@ export const yourArticles = (token: any) =>
     },
   });
 
-export const globalArticles = () =>
+export const globalArticles = (token: any) =>
   axios.get(`${URL}/api/articles`, {
     headers: {
       "Content-Type": "application/json",
-      // Authorization: `Bearer ${token}`,
+      Authorization: `Bearer ${token}`,
     },
   });

@@ -3,6 +3,8 @@ import { withFormik } from "formik";
 import * as Yup from "yup";
 import TagList from "./components/TagList";
 import { postArticle } from "./apis";
+import { useParams } from "react-router";
+import { getArticle } from "../Articles/apis";
 
 function Editor(props: any) {
   const [input, setInput] = useState("");
@@ -16,7 +18,13 @@ function Editor(props: any) {
       console.log(res.data);
     });
   };
-
+  const [article, setArticle] = useState<any>();
+  const { slug }: any = useParams();
+  useEffect(() => {
+    if (slug) {
+      console.log(slug);
+    } else console.log("no slug");
+  }, [slug]);
   const onKeyDown = (e: any) => {
     const { key } = e;
     const trimmedInput = input.trim();

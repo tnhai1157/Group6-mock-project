@@ -19,10 +19,3 @@ export const postArticle = (article: any, tags: any, token: string | null) =>
       },
     }
   );
-
-//   article: {
-//     title: article?.title,
-//     description: article?.description,
-//     body: article?.content,
-//     tagList: tags,
-//   }
