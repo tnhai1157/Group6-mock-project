@@ -18,23 +18,14 @@ export const listArticles = (token: any) =>
     },
   });
 
-// export const getTags = () => axios.get(`${URL}/api/tags`);
-
-export const registration = (payload: any) =>
-  axios.post(
-    `${URL}/api/users`,
-    {
-      user: {
-        username: payload.username,
-        email: payload.email,
-        password: payload.password,
-      },
-      "Access-Control-Allow-Origin": "*",
-      "Access-Control-Allow-Credentials": true,
+export const userByToken = (payload: any) =>
+  axios.get(`${URL}/api/user`, {
+    // body: {
+    //   "Access-Control-Allow-Origin": "*",
+    //   "Access-Control-Allow-Credentials": true,
+    // },
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${payload.token}`,
     },
-    {
-      headers: {
-        "Content-Type": "application/json",
-      },
-    }
-  );
+  } as any);

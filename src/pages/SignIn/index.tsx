@@ -4,17 +4,6 @@ import { useHistory, useLocation, Link } from "react-router-dom";
 import { useSelector } from "react-redux";
 
 export default function SignIn() {
-  // const history = useHistory();
-  // const location = useLocation();
-  // const user = useSelector((state: any) => state.user.data.user);
-  // const auth = user;
-  // const { from }: any = location.state || { from: { pathname: "/" } };
-  // let login = () => {
-  //   auth.signin(() => {
-  //     history.replace(from);
-  //   });
-  // };
-
   return (
     <div className="auth-page">
       <div className="container page">

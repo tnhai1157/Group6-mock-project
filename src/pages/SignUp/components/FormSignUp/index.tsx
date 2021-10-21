@@ -3,7 +3,8 @@ import { withFormik } from "formik";
 import * as Yup from "yup";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
-import { registration } from "../../../../apis";
+import { getUser } from "../../../SignIn/redux/actions";
+import { getUserSignUp } from "../../redux/actions";
 
 function FormSignUp(props: any) {
   const dispatch = useDispatch();
@@ -11,20 +12,21 @@ function FormSignUp(props: any) {
   const user = useSelector((state: any) => state.user.data.user);
   const [error, setError] = useState();
 
-  // useEffect(() => {
-  //   if (user) history.push("/");
-  // }, [user, history]);
+  useEffect(() => {
+    if (user) history.push("/");
+  }, [user, history]);
 
   const handleSubmit = (e: any) => {
     e.preventDefault();
-    console.log(props.values);
     const { username, email, password } = props.values;
-    registration({ username, email, password })
-      .then((res) => history.push("/"))
-      .catch((error) => {
-        const errorObject = { ...error.response.data.errors };
-        setError(errorObject);
-      });
+
+    dispatch(
+      getUserSignUp.getUserSignUpRequest({
+        username: username,
+        email: email,
+        password: password,
+      })
+    );
   };
 
   return (

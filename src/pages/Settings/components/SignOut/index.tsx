@@ -15,7 +15,6 @@ export default function SignOut() {
   return (
     <div>
       <hr />
-
       <button
         className="btn btn-outline-danger"
         ng-click="$ctrl.logout()"

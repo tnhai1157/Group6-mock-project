@@ -9,26 +9,33 @@ import Profile from "./pages/Profile";
 import Settings from "./pages/Settings";
 import Articles from "./pages/Articles";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import SignUp from "./pages/SignUp";
 import GuardedRoute from "./components/Route/GaurdRoute";
+import { getUserByToken } from "./redux/actions";
 
 function App() {
   const user = useSelector((state: any) => state.user.data.user);
-  console.log(user);
   const [loginState, setLoginState] = useState<boolean>(false);
+  const dispatch = useDispatch();
 
   useEffect(() => {
     if (user) {
       window.localStorage.setItem("jwtToken", user.token);
+    } else {
+      const userToken = window.localStorage.getItem("jwtToken");
+      if (userToken) {
+        dispatch(getUserByToken.getUserByTokenRequest({ token: userToken }));
+      }
     }
     const userToken = window.localStorage.getItem("jwtToken");
+
     if (userToken) {
       setLoginState(true);
     } else {
       setLoginState(false);
     }
-  }, [user]);
+  }, [user, dispatch]);
 
   return (
     <Router>

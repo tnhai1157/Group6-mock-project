@@ -3,22 +3,29 @@ import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router";
 import * as Yup from "yup";
-import { updateUser } from "../../apis";
+import * as actions from "../../redux/actions";
 
 function FormSettings(props: any) {
   const dispatch = useDispatch();
   const history = useHistory();
   const user = useSelector((state: any) => state.user.data.user);
-  console.log({ user });
   const [error, setError] = useState();
 
   const handleSubmit = (e: any) => {
     e.preventDefault();
     console.log(props.values);
     const { imageURL, bio, username, email, password } = props.values;
-    updateUser({ imageURL, bio, username, email, password }, user.token)
-      .then((res) => console.log(res))
-      .catch((err) => console.log(err));
+
+    dispatch(
+      actions.updateUser.updateUserRequest({
+        imageURL,
+        bio,
+        username,
+        email,
+        password,
+        token: user.token,
+      })
+    );
     // registration({ username, email, password })
     //   .then((res) => history.push("/"))
     //   .catch((error) => {
@@ -53,6 +60,8 @@ function FormSettings(props: any) {
           />
         </fieldset>
         <fieldset className="form-group">
+          <p className="error-messages">{props.errors.username}</p>
+
           <input
             className="form-control form-control-lg"
             type="text"
@@ -115,7 +124,8 @@ const FormikFormSettings = withFormik({
   },
   validationSchema: Yup.object().shape({
     // Validate form field
-    email: Yup.string().email(),
+    username: Yup.string().required("Username is required"),
+    email: Yup.string().email().required("Email is required"),
   }),
 } as any)(FormSettings);
 
