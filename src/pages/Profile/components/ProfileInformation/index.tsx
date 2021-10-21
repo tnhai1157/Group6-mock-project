@@ -3,7 +3,7 @@ import { useSelector } from "react-redux";
 import { IMG_NOAVATAR } from "../../../../constant";
 
 export default function ProfileInformation() {
-  const user = useSelector((state: any) => state.user.data.user);
+  const user = useSelector((state: any) => state.user.data);
   console.log(user);
 
   return (
@@ -12,8 +12,8 @@ export default function ProfileInformation() {
         <div className="container">
           <div className="row">
             <div className="col-xs-12 col-md-10 offset-md-1">
-              {user?.imageURL ? (
-                <img src={user?.imageURL} className="user-img" alt="" />
+              {user?.image ? (
+                <img src={user?.image} className="user-img" alt="" />
               ) : (
                 <img src={IMG_NOAVATAR} className="user-img" alt="" />
               )}

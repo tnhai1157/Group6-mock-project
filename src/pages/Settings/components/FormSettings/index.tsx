@@ -33,7 +33,7 @@ function FormSettings(props: any) {
         console.log(res);
         const user = res.data.user;
         dispatch(saveUserInStore.saveUserInStoreSuccess(user));
-        history.push("/profile");
+        history.push(`/${user.username}`);
       })
       .catch((e) => {
         const errorObject = { ...e.response.data.errors };
