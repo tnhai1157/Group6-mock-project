@@ -1,54 +1,61 @@
 import { withFormik } from "formik";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router";
 import * as Yup from "yup";
+import { saveUserInStore } from "../../../../redux/actions";
+import { updateUser } from "../../apis";
 import * as actions from "../../redux/actions";
 
 function FormSettings(props: any) {
   const dispatch = useDispatch();
   const history = useHistory();
-  const user = useSelector((state: any) => state.user.data.user);
+  const user = useSelector((state: any) => state.user.data);
+  const { setFieldValue } = props;
+
+  useEffect(() => {
+    setFieldValue("imageURL", user.image);
+    setFieldValue("username", user.username);
+    setFieldValue("bio", user.bio);
+    setFieldValue("email", user.email);
+  }, [user, setFieldValue]);
+
   const [error, setError] = useState();
+  const token = window.localStorage.getItem("jwtToken");
 
   const handleSubmit = (e: any) => {
     e.preventDefault();
-    console.log(props.values);
     const { imageURL, bio, username, email, password } = props.values;
+    console.log({ input: props.values });
 
-    dispatch(
-      actions.updateUser.updateUserRequest({
-        imageURL,
-        bio,
-        username,
-        email,
-        password,
-        token: user.token,
+    updateUser({ imageURL, bio, username, email, password }, token)
+      .then((res: any) => {
+        console.log(res);
+        const user = res.data.user;
+        dispatch(saveUserInStore.saveUserInStoreSuccess(user));
+        history.push("/profile");
       })
-    );
-    // registration({ username, email, password })
-    //   .then((res) => history.push("/"))
-    //   .catch((error) => {
-    //     const errorObject = { ...error.response.data.errors };
-    //     setError(errorObject);
-    //   });
+      .catch((e) => {
+        const errorObject = { ...e.response.data.errors };
+        setError(errorObject);
+      });
   };
 
   return (
     <form onSubmit={handleSubmit}>
       <fieldset>
-        <fieldset className="form-group">
+        <ul className="form-group">
           {error &&
             Object.keys(error).map((obj, i) => {
               return (
-                <div>
+                <li key={i}>
                   <p className="error-messages">
                     {obj} {error[obj]}
                   </p>
-                </div>
+                </li>
               );
             })}
-        </fieldset>
+        </ul>
         <fieldset className="form-group">
           <input
             className="form-control"
@@ -60,7 +67,7 @@ function FormSettings(props: any) {
           />
         </fieldset>
         <fieldset className="form-group">
-          <p className="error-messages">{props.errors.username}</p>
+          {/* <p className="error-messages">{props.errors.username}</p> */}
 
           <input
             className="form-control form-control-lg"
@@ -82,7 +89,7 @@ function FormSettings(props: any) {
           ></textarea>
         </fieldset>
         <fieldset className="form-group">
-          <p className="error-messages">{props.errors.email}</p>
+          {/* <p className="error-messages">{props.errors.email}</p> */}
           <input
             className="form-control form-control-lg"
             type="text"
@@ -111,11 +118,10 @@ function FormSettings(props: any) {
 }
 
 const FormikFormSettings = withFormik({
-  mapPropsToValues(user: any) {
+  mapPropsToValues(props: any) {
     // Init form field
     return {
-      imageURL:
-        "https://realworld-temp-api.herokuapp.com/images/smiley-cyrus.jpeg",
+      imageURL: "",
       username: "",
       bio: "",
       email: "",

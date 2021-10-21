@@ -4,32 +4,42 @@ import * as Yup from "yup";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
 import { getUser } from "../../redux/actions";
+import { postUsersSignIn } from "../../apis";
+import { saveUserInStore } from "../../../../redux/actions";
 
 function FormLogin(props: any) {
   const dispatch = useDispatch();
   const history = useHistory();
-  const user = useSelector((state: any) => state.user.data.user);
-  const [error, setError] = useState("");
+  const [error, setError] = useState(false);
 
-  useEffect(() => {
-    if (user) history.push("/");
-  }, [user, history]);
+  // useEffect(() => {
+  //   if (user) history.push("/");
+  // }, [user, history]);
 
   const handleSubmit = (e: any) => {
     e.preventDefault();
     const { email, password } = props.values;
-    dispatch(
-      getUser.getUserRequest({
-        email: email,
-        password: password,
+    postUsersSignIn({ email, password })
+      .then((res: any) => {
+        const user = res.data.user;
+        history.push("/");
+        dispatch(saveUserInStore.saveUserInStoreSuccess({ user }));
       })
-    );
+      .catch((e) => setError(true));
+    // dispatch(
+    //   getUser.getUserRequest({
+    //     email: email,
+    //     password: password,
+    //   })
+    // );
   };
 
   return (
     <form onSubmit={handleSubmit}>
       <fieldset className="form-group">
-        <p className="error-messages">{error}</p>
+        <p className="error-messages">
+          {error && "Email or password is invalid"}
+        </p>
         <p className="error-messages">{props.errors.email}</p>
         <input
           className="form-control form-control-lg"

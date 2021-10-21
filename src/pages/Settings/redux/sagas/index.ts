@@ -3,9 +3,12 @@ import * as api from "../../apis";
 import * as actions from "../actions";
 
 function* fetchUserSaga(action: any): any {
-  const user = yield call(api.updateUser as any, action.payload);
-  console.log(user);
-  yield put(actions.updateUser.updateUserSuccess(user.data));
+  try {
+    const user = yield call(api.updateUser as any, action.payload);
+    yield put(actions.updateUser.updateUserSuccess(user.data));
+  } catch (error) {
+    yield put(actions.updateUser.updateUserFailure(error));
+  }
 }
 
 function* watchUpdateUserProcess() {

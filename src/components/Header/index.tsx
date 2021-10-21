@@ -5,8 +5,8 @@ import { Link, NavLink } from "react-router-dom";
 export default function Header({ userToken }: { userToken: boolean }) {
   const token = userToken;
 
-  const user = useSelector((state: any) => state.user.data.user);
-  console.log(user);
+  const user = useSelector((state: any) => state.user?.data);
+
   return token ? (
     <div>
       {" "}

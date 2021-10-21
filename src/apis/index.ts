@@ -18,10 +18,10 @@ export const listArticles = (token: any) =>
     },
   });
 
-export const userByToken = (payload: any) =>
+export const userByToken = (token: any) =>
   axios.get(`${URL}/api/user`, {
     headers: {
       "Content-Type": "application/json",
-      Authorization: `Bearer ${payload.token}`,
+      Authorization: `Bearer ${token}`,
     },
   } as any);

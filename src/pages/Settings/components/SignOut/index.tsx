@@ -1,6 +1,7 @@
 import React from "react";
 import { useDispatch } from "react-redux";
 import { useHistory } from "react-router";
+import { deleteUserInStore } from "../../../../redux/actions";
 import { getUser } from "../../../SignIn/redux/actions";
 
 export default function SignOut() {
@@ -8,7 +9,7 @@ export default function SignOut() {
   const dispatch = useDispatch();
   const handleSignOut = () => {
     window.localStorage.removeItem("jwtToken");
-    dispatch(getUser.deleteUser());
+    dispatch(deleteUserInStore());
     history.push("/");
   };
 

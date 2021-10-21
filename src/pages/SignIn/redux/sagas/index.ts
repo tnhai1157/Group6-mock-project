@@ -4,8 +4,13 @@ import * as actions from "../actions";
 import * as api from "../../apis";
 
 function* fetchUserSaga(action: any): any {
-  const user = yield call(api.postUsersLogin as any, action.payload);
-  yield put(actions.getUser.getUserSuccess(user.data));
+  try {
+    const user = yield call(api.postUsersSignIn as any, action.payload);
+    yield put(actions.getUser.getUserSuccess(user.data));
+  } catch (error) {
+    console.log(error);
+    yield put(actions.getUser.getUserFailure(error));
+  }
 }
 
 function* watchSignInProcess() {

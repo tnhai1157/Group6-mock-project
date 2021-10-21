@@ -5,28 +5,40 @@ import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
 import { getUser } from "../../../SignIn/redux/actions";
 import { getUserSignUp } from "../../redux/actions";
+import { postUserSignUp } from "../../apis";
+import { saveUserInStore } from "../../../../redux/actions";
 
 function FormSignUp(props: any) {
   const dispatch = useDispatch();
   const history = useHistory();
-  const user = useSelector((state: any) => state.user.data.user);
   const [error, setError] = useState();
 
-  useEffect(() => {
-    if (user) history.push("/");
-  }, [user, history]);
+  // useEffect(() => {
+  //   if (user) history.push("/");
+  // }, [user, history]);
 
   const handleSubmit = (e: any) => {
     e.preventDefault();
     const { username, email, password } = props.values;
 
-    dispatch(
-      getUserSignUp.getUserSignUpRequest({
-        username: username,
-        email: email,
-        password: password,
+    postUserSignUp({ username, email, password })
+      .then((res: any) => {
+        const user = res.data.user;
+        dispatch(saveUserInStore.saveUserInStoreSuccess(user));
+        history.push("/");
       })
-    );
+      .catch((e) => {
+        const errorObject = { ...e.response.data.errors };
+        setError(errorObject);
+      });
+
+    // dispatch(
+    //   getUserSignUp.getUserSignUpRequest({
+    //     username: username,
+    //     email: email,
+    //     password: password,
+    //   })
+    // );
   };
 
   return (
@@ -35,7 +47,7 @@ function FormSignUp(props: any) {
         {error &&
           Object.keys(error).map((obj, i) => {
             return (
-              <div>
+              <div key={i}>
                 <p className="error-messages">
                   {obj} {error[obj]}
                 </p>

@@ -3,8 +3,13 @@ import * as actions from "../actions";
 import * as api from "../../apis";
 
 function* fetchUserSaga(action: any): any {
-  const user = yield call(api.userByToken as any, action.payload);
-  yield put(actions.getUserByToken.getUserByTokenSuccess(user.data));
+  try {
+    const user = yield call(api.userByToken as any, action.payload);
+    yield put(actions.getUserByToken.getUserByTokenSuccess(user.data));
+  } catch (error) {
+    console.log(error);
+    yield put(actions.getUserByToken.getUserByTokenFailure(error));
+  }
 }
 
 function* watchGetUserByToken() {

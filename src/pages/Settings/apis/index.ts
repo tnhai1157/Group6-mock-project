@@ -1,12 +1,12 @@
 import axios from "axios";
 import { URL } from "../../../apis";
 
-export const updateUser = (payload: any) =>
+export const updateUser = (payload: any, token: any) =>
   axios.put(
     `${URL}/api/user`,
     {
       user: {
-        imageURL: payload.imageURL,
+        image: payload.imageURL,
         bio: payload.bio,
         username: payload.username,
         email: payload.email,
@@ -18,7 +18,7 @@ export const updateUser = (payload: any) =>
     {
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${payload.token}`,
+        Authorization: `Bearer ${token}`,
       },
     }
   );

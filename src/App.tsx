@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import "./App.css";
 import Editor from "./pages/Editor";
 import Footer from "./components/Footer";
@@ -17,30 +17,52 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 import SignUp from "./pages/SignUp";
 import GuardedRoute from "./components/Route/GaurdRoute";
-import { getUserByToken } from "./redux/actions";
+import { getUserByToken, saveUserInStore } from "./redux/actions";
+import { userByToken } from "./apis";
 
 function App() {
+  const dispatch = useDispatch();
   const user = useSelector((state: any) => state.user.data.user);
   const [loginState, setLoginState] = useState<boolean>(false);
-  const dispatch = useDispatch();
 
   useEffect(() => {
     if (user) {
       window.localStorage.setItem("jwtToken", user.token);
-    } else {
-      const userToken = window.localStorage.getItem("jwtToken");
-      if (userToken) {
-        dispatch(getUserByToken.getUserByTokenRequest({ token: userToken }));
-      }
     }
     const userToken = window.localStorage.getItem("jwtToken");
 
     if (userToken) {
       setLoginState(true);
+      userByToken(userToken).then((res: any) => {
+        const user = res.data.user;
+        dispatch(saveUserInStore.saveUserInStoreSuccess(user));
+      });
     } else {
       setLoginState(false);
     }
   }, [user, dispatch]);
+
+  // let token = window.localStorage.getItem("jwtToken");
+  // console.log({ token });
+
+  // useEffect(() => {
+  //   if (token) {
+  //     userByToken(token).then((res: any) => {
+  //       const user = res.data.user;
+  //       dispatch(saveUserInStore.saveUserInStoreSuccess(user));
+  //     });
+  //     setLoginState(true);
+  //   } else {
+  //     setLoginState(false);
+  //   }
+  // }, [token, dispatch]);
+
+  // useEffect(() => {
+  //   if (user) {
+  //     window.localStorage.setItem("jwtToken", user.token);
+  //   }
+  //   token = window.localStorage.getItem("jwtToken");
+  // }, [user]);
 
   return (
     <Router>
