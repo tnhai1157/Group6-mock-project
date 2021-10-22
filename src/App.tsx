@@ -23,7 +23,7 @@ import { RootState } from ".";
 
 function App() {
   const dispatch = useDispatch();
-  const user = useSelector((state: RootState) => state.user.data);
+  const user = useSelector((state: RootState) => state?.user?.data);
   const [loginState, setLoginState] = useState<boolean>(false);
   const token = window.localStorage.getItem("jwtToken");
 
