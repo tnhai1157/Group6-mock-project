@@ -8,6 +8,7 @@ import { RootState } from "../../../..";
 import { Article } from "../../../../interfaces";
 
 export default function ArticlesPreview() {
+<<<<<<< HEAD
   const [articles, setArticles] = useState<Article[]>([]);
   const user = useSelector((state: RootState) => state.user.data);
   const { url } = useRouteMatch();
@@ -15,18 +16,35 @@ export default function ArticlesPreview() {
   const handleClickYourFeed = () => {
     myArticles(user?.username).then((res) => {
       console.log(res.data.articles);
+=======
+  const [articles, setArticles] = useState();
+  const token = window.localStorage.getItem("jwtToken");
+  const user = useSelector((state: any) => state.user.data);
+  const { url } = useRouteMatch();
+
+  const handleClickYourFeed = () => {
+    myArticles(user?.username, token).then((res: any) => {
+>>>>>>> devHaiTN7
       setArticles(res.data.articles);
     });
   };
 
   const handleClickGlobalFeed = () => {
+<<<<<<< HEAD
     favoritedArticles(user?.username).then((res) => {
+=======
+    favoritedArticles(user?.username, token).then((res: any) => {
+>>>>>>> devHaiTN7
       setArticles(res.data.articles);
     });
   };
 
   useEffect(() => {
+<<<<<<< HEAD
     myArticles(user?.username).then((res) => {
+=======
+    myArticles(user?.username, token).then((res: any) => {
+>>>>>>> devHaiTN7
       setArticles(res.data.articles);
     });
   }, [user?.username]);
