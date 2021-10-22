@@ -82,7 +82,7 @@ function App() {
         <Route path="/article/:slug">
           <Articles />
         </Route>
-        <Redirect to="/" />
+        {/* <Redirect to="/" /> */}
       </Switch>
       <Footer />
     </Router>

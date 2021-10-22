@@ -8,23 +8,23 @@ import ArticlePreview from "../../../Home/components/ArticlePreview";
 export default function ArticlesPreview() {
   const [articles, setArticles] = useState();
   const token = window.localStorage.getItem("jwtToken");
-  const user = useSelector((state: any) => state.user.data.user);
+  const user = useSelector((state: any) => state.user.data);
   const { url } = useRouteMatch();
 
   const handleClickYourFeed = () => {
-    myArticles(user?.username).then((res: any) => {
+    myArticles(user?.username, token).then((res: any) => {
       setArticles(res.data.articles);
     });
   };
 
   const handleClickGlobalFeed = () => {
-    favoritedArticles(user?.username).then((res: any) => {
+    favoritedArticles(user?.username, token).then((res: any) => {
       setArticles(res.data.articles);
     });
   };
 
   useEffect(() => {
-    myArticles(user?.username).then((res: any) => {
+    myArticles(user?.username, token).then((res: any) => {
       setArticles(res.data.articles);
     });
   }, [user?.username]);

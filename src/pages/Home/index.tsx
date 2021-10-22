@@ -15,14 +15,12 @@ export default function Home({ userToken }: { userToken: boolean }) {
     setTagName("");
     yourArticles(token).then((res: any) => {
       setFeeds(res.data.articles);
-      // console.log(res.data.articles);
     });
   };
 
   const handleClickGlobalFeed = () => {
     globalArticles(token).then((res: any) => {
       setFeeds(res.data.articles);
-      // console.log(res.data.articles);
     });
     setTagName("");
   };
