@@ -3,26 +3,27 @@ import { withFormik } from "formik";
 import * as Yup from "yup";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
-import { registration } from "../../../../apis";
+import { postUserSignUp } from "../../apis";
+import { saveUserInStore } from "../../../../redux/actions";
 
 function FormSignUp(props: any) {
   const dispatch = useDispatch();
   const history = useHistory();
-  const user = useSelector((state: any) => state.user.data.user);
   const [error, setError] = useState();
-
-  // useEffect(() => {
-  //   if (user) history.push("/");
-  // }, [user, history]);
 
   const handleSubmit = (e: any) => {
     e.preventDefault();
-    console.log(props.values);
     const { username, email, password } = props.values;
-    registration({ username, email, password })
-      .then((res) => history.push("/"))
-      .catch((error) => {
-        const errorObject = { ...error.response.data.errors };
+
+    postUserSignUp({ username, email, password })
+      .then((res: any) => {
+        const user = res.data.user;
+        dispatch(saveUserInStore.saveUserInStoreSuccess(user));
+        window.localStorage.setItem("jwtToken", user.token);
+        history.push("/");
+      })
+      .catch((e) => {
+        const errorObject = { ...e.response.data.errors };
         setError(errorObject);
       });
   };
@@ -33,7 +34,7 @@ function FormSignUp(props: any) {
         {error &&
           Object.keys(error).map((obj, i) => {
             return (
-              <div>
+              <div key={i}>
                 <p className="error-messages">
                   {obj} {error[obj]}
                 </p>
@@ -72,7 +73,12 @@ function FormSignUp(props: any) {
           onChange={props.handleChange}
         />
       </fieldset>
-      <button className="btn btn-lg btn-primary pull-xs-right">Sign up</button>
+      <button
+        className="btn btn-lg btn-primary pull-xs-right"
+        disabled={!props.isValid || !props.values.email}
+      >
+        Sign up
+      </button>
     </form>
   );
 }

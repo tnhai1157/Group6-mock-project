@@ -10,11 +10,13 @@ export default function Articles() {
   const [article, setArticle] = useState<any>();
   const [checkAuthor, setCheckAuthor] = useState(false);
   const history = useHistory();
+
   useEffect(() => {
     getArticle(slug).then((res: any) => {
       setArticle(res.data.article);
     });
   }, [slug]);
+
   const handleDelete = () => {
     deleteArticle(slug, token).then((res: any) => {
       history.push("");
@@ -32,6 +34,7 @@ export default function Articles() {
                   ? article.author.image
                   : "https://static.productionready.io/images/smiley-cyrus.jpg"
               }
+              alt=""
             />
             <div className="info">
               <NavLink to={"/profile/" + article?.author?.username}>
@@ -114,6 +117,7 @@ export default function Articles() {
                 <img
                   src="http://i.imgur.com/Qr71crq.jpg"
                   className="comment-author-img"
+                  alt=""
                 />
                 <button className="btn btn-sm btn-primary">Post Comment</button>
               </div>
@@ -130,6 +134,7 @@ export default function Articles() {
                   <img
                     src="http://i.imgur.com/Qr71crq.jpg"
                     className="comment-author-img"
+                    alt=""
                   />
                 </a>
                 &nbsp;
@@ -151,6 +156,7 @@ export default function Articles() {
                   <img
                     src="http://i.imgur.com/Qr71crq.jpg"
                     className="comment-author-img"
+                    alt=""
                   />
                 </a>
                 &nbsp;

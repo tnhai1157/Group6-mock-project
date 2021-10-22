@@ -13,6 +13,7 @@ export default function TagList({ tags, setTags }: any) {
         <span
           ng-repeat="tag in $ctrl.article.tagList"
           className="tag-default tag-pill ng-binding ng-scope"
+          key={index}
         >
           <i
             className="ion-close-round"
