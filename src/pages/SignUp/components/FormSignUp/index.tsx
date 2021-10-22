@@ -1,22 +1,23 @@
-import React, { useEffect, useState } from "react";
-import { withFormik } from "formik";
+import React, { SyntheticEvent, useEffect, useState } from "react";
+import { withFormik, InjectedFormikProps } from "formik";
 import * as Yup from "yup";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
 import { postUserSignUp } from "../../apis";
 import { saveUserInStore } from "../../../../redux/actions";
+import { FormProps, FormValues } from "./interface";
 
-function FormSignUp(props: any) {
+function FormSignUp(props: InjectedFormikProps<FormProps, FormValues>) {
   const dispatch = useDispatch();
   const history = useHistory();
   const [error, setError] = useState();
 
-  const handleSubmit = (e: any) => {
+  const handleSubmit = (e: SyntheticEvent) => {
     e.preventDefault();
     const { username, email, password } = props.values;
 
     postUserSignUp({ username, email, password })
-      .then((res: any) => {
+      .then((res) => {
         const user = res.data.user;
         dispatch(saveUserInStore.saveUserInStoreSuccess(user));
         window.localStorage.setItem("jwtToken", user.token);
@@ -98,6 +99,7 @@ const FormikFormSignUp = withFormik({
     email: Yup.string().email().required("Email is required"),
     password: Yup.string().required("Please provide a valid password"),
   }),
-} as any)(FormSignUp);
+  handleSubmit: () => {},
+})(FormSignUp);
 
 export default FormikFormSignUp;

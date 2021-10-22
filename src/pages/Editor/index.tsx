@@ -1,51 +1,74 @@
-import React, { useEffect, useState } from "react";
-import { withFormik } from "formik";
+import React, {
+  ChangeEvent,
+  KeyboardEvent,
+  SyntheticEvent,
+  useEffect,
+  useState,
+} from "react";
+import { InjectedFormikProps, withFormik } from "formik";
 import * as Yup from "yup";
 import TagList from "./components/TagList";
-import { postArticle } from "./apis";
-import { useParams } from "react-router";
-import { getArticle } from "../Articles/apis";
+import { getArticleBySlug, postArticle, putArticle } from "./apis";
+import { useHistory, useParams } from "react-router";
+import { FormProps, FormValues, Slug } from "./interface";
 
-function Editor(props: any) {
+function Editor(props: InjectedFormikProps<FormProps, FormValues>) {
   const [input, setInput] = useState("");
-  const [tags, setTags] = useState<any>([]);
+  const [tags, setTags] = useState<String[]>([]);
   const [isKeyReleased, setIsKeyReleased] = useState(false);
   const token = window.localStorage.getItem("jwtToken");
-  const [article, setArticle] = useState<any>();
-  const { slug }: any = useParams();
+  const { slug } = useParams<Slug>();
+  const { setFieldValue } = props;
+  const history = useHistory();
 
-  const handleSubmit = (e: any) => {
+  const handleSubmit = (e: SyntheticEvent) => {
     e.preventDefault();
-    console.log(props.values, tags);
-    postArticle(props.values, tags, token).then((res: any) => {
-      console.log(res.data);
-    });
+    if (!slug) {
+      postArticle(props.values, tags, token).then((res) => {
+        const slug = res.data.article.slug;
+        history.push(`/article/${slug}`);
+      });
+    } else {
+      putArticle(props.values, tags, token, slug).then((res) => {
+        history.push(`/article/${slug}`);
+      });
+    }
   };
 
   useEffect(() => {
     if (slug) {
-      console.log(slug);
-    } else console.log("no slug");
-  }, [slug]);
+      getArticleBySlug(slug).then((res) => {
+        const article = res.data.article;
+        setFieldValue("title", article.title);
+        setFieldValue("description", article.description);
+        setFieldValue("content", article.body);
+        setTags(article.tagList);
+      });
+    } else {
+      setFieldValue("title", "");
+      setFieldValue("description", "");
+      setFieldValue("content", "");
+    }
+  }, [slug, setFieldValue]);
 
-  const onKeyDown = (e: any) => {
+  const onKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
     const { key } = e;
     const trimmedInput = input.trim();
 
     if (
       key === "Enter" &&
       trimmedInput.length &&
-      !tags.includes(trimmedInput)
+      !tags?.includes(trimmedInput)
     ) {
       e.preventDefault();
-      setTags((prevState: any) => [...prevState, trimmedInput]);
+      setTags((prevState) => [...prevState, trimmedInput]);
       setInput("");
     }
 
     if (key === "Backspace" && !input.length && tags.length) {
       e.preventDefault();
       const tagsCopy = [...tags];
-      const poppedTag = tagsCopy.pop();
+      const poppedTag = tagsCopy.pop() as string;
 
       setTags(tagsCopy);
       setInput(poppedTag);
@@ -54,7 +77,7 @@ function Editor(props: any) {
     setIsKeyReleased(false);
   };
 
-  const onChange = (e: any) => {
+  const onChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { value } = e.target;
     setInput(value);
   };
@@ -107,17 +130,17 @@ function Editor(props: any) {
                   <input
                     type="text"
                     className="form-control"
-                    placeholder="Enter tags"
+                    placeholder={slug ? "Don't change tags" : "Enter tags"}
                     value={input}
                     onKeyDown={onKeyDown}
                     onChange={onChange}
                     onKeyUp={onKeyUp}
+                    disabled={slug ? true : false}
                   />
                   <TagList tags={tags} setTags={setTags} />
                 </fieldset>
                 <button
                   className="btn btn-lg pull-xs-right btn-primary"
-                  // onClick={handleSubmit}
                   disabled={!props.isValid || !props.values.title}
                 >
                   Publish Article
@@ -145,6 +168,7 @@ const FormikEditor = withFormik({
     description: Yup.string().required("Please provide a description"),
     content: Yup.string().required("Please provide content"),
   }),
-} as any)(Editor);
+  handleSubmit: () => {},
+})(Editor);
 
 export default FormikEditor;

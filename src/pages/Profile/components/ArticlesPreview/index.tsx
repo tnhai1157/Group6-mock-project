@@ -4,27 +4,29 @@ import { favoritedArticles, myArticles } from "../../apis";
 import { useRouteMatch } from "react-router-dom";
 import { useSelector } from "react-redux";
 import ArticlePreview from "../../../Home/components/ArticlePreview";
+import { RootState } from "../../../..";
+import { Article } from "../../../../interfaces";
 
 export default function ArticlesPreview() {
-  const [articles, setArticles] = useState();
-  const token = window.localStorage.getItem("jwtToken");
-  const user = useSelector((state: any) => state.user.data.user);
+  const [articles, setArticles] = useState<Article[]>([]);
+  const user = useSelector((state: RootState) => state.user.data);
   const { url } = useRouteMatch();
 
   const handleClickYourFeed = () => {
-    myArticles(user?.username).then((res: any) => {
+    myArticles(user?.username).then((res) => {
+      console.log(res.data.articles);
       setArticles(res.data.articles);
     });
   };
 
   const handleClickGlobalFeed = () => {
-    favoritedArticles(user?.username).then((res: any) => {
+    favoritedArticles(user?.username).then((res) => {
       setArticles(res.data.articles);
     });
   };
 
   useEffect(() => {
-    myArticles(user?.username).then((res: any) => {
+    myArticles(user?.username).then((res) => {
       setArticles(res.data.articles);
     });
   }, [user?.username]);

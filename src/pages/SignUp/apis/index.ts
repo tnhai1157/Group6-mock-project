@@ -1,14 +1,16 @@
+import { UserNotFullFieldRequire } from "./../../../interfaces/index";
 import axios from "axios";
 import { URL } from "../../../apis";
+import { Data } from "../../../interfaces";
 
-export const postUserSignUp = (payload: any) =>
-  axios.post(
+export const postUserSignUp = (user: UserNotFullFieldRequire) =>
+  axios.post<Data>(
     `${URL}/api/users`,
     {
       user: {
-        username: payload.username,
-        email: payload.email,
-        password: payload.password,
+        username: user.username,
+        email: user.email,
+        password: user.password,
       },
       "Access-Control-Allow-Origin": "*",
       "Access-Control-Allow-Credentials": true,

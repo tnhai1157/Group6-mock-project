@@ -1,21 +1,22 @@
-import React, { useState } from "react";
-import { withFormik } from "formik";
+import React, { SyntheticEvent, useState } from "react";
+import { withFormik, InjectedFormikProps } from "formik";
 import * as Yup from "yup";
 import { useDispatch } from "react-redux";
 import { useHistory } from "react-router-dom";
 import { postUsersSignIn } from "../../apis";
 import { saveUserInStore } from "../../../../redux/actions";
+import { FormProps, FormValues } from "./interface";
 
-function FormLogin(props: any) {
+function FormLogin(props: InjectedFormikProps<FormProps, FormValues>) {
   const dispatch = useDispatch();
   const history = useHistory();
   const [error, setError] = useState(false);
 
-  const handleSubmit = (e: any) => {
+  const handleSubmit = (e: SyntheticEvent) => {
     e.preventDefault();
     const { email, password } = props.values;
     postUsersSignIn({ email, password })
-      .then((res: any) => {
+      .then((res) => {
         const user = res.data.user;
         history.push("/");
         dispatch(saveUserInStore.saveUserInStoreSuccess({ user }));
@@ -74,6 +75,7 @@ const FormikFormLogin = withFormik({
     email: Yup.string().email().required("Email is required"),
     password: Yup.string().required("Please provide a valid password"),
   }),
-} as any)(FormLogin);
+  handleSubmit: () => {},
+})(FormLogin);
 
 export default FormikFormLogin;

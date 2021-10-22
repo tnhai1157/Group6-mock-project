@@ -1,20 +1,22 @@
 import { useState } from "react";
 import { NavLink } from "react-router-dom";
+import { Article } from "../../../../../../interfaces";
 import { deleteFavorite, postFavorite } from "../apis";
 
-export default function ArticleItem({ feed }: any) {
+export default function ArticleItem({ feed }: { feed: Article }) {
   const token = window.localStorage.getItem("jwtToken");
   const [likeCount, setLikeCount] = useState<number>(feed?.favoritesCount);
   const [likeState, setLikeState] = useState<boolean>(feed?.favorited);
+
   const handleLike = (slug: string) => {
     if (token) {
       if (likeState) {
-        deleteFavorite(token, slug).then((res: any) => {
+        deleteFavorite(token, slug).then((res) => {
           setLikeCount(res.data.article?.favoritesCount);
           setLikeState(false);
         });
       } else {
-        postFavorite(token, slug).then((res: any) => {
+        postFavorite(token, slug).then((res) => {
           setLikeCount(res.data.article?.favoritesCount);
           setLikeState(true);
         });
@@ -36,6 +38,7 @@ export default function ArticleItem({ feed }: any) {
               ? feed.author.image
               : "https://static.productionready.io/images/smiley-cyrus.jpg"
           }
+          alt=""
         />
         <div className="info">
           <NavLink to={"/profile/" + feed?.author?.username}>
@@ -57,9 +60,9 @@ export default function ArticleItem({ feed }: any) {
           Read more...
         </NavLink>
         <ul className="tag-list">
-          {feed.tagList?.map((tag: any) => (
+          {feed.tagList?.map((tag, i) => (
             <li
-              key={tag}
+              key={i}
               className="tag-default tag-pill tag-outline ng-binding ng-scope"
               ng-repeat="tag in $ctrl.article.tagList"
             >

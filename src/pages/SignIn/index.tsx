@@ -1,7 +1,6 @@
 import React from "react";
 import FormLogin from "./components/FormSignIn";
-import { useHistory, useLocation, Link } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { Link } from "react-router-dom";
 
 export default function SignIn() {
   return (

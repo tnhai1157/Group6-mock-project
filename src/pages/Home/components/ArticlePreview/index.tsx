@@ -1,10 +1,11 @@
+import { Article } from "../../../../interfaces";
 import ArticleItem from "./ArticleItem/Components";
 
-export default function ArticlePreview({ feeds }: any) {
+export default function ArticlePreview({ feeds }: { feeds: Article[] }) {
   return (
     <div>
       {feeds && feeds.length > 0 ? (
-        feeds.map((feed: any) => (
+        feeds.map((feed) => (
           <div key={feed.slug}>
             <ArticleItem feed={feed} />
           </div>

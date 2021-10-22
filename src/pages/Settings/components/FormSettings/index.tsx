@@ -1,15 +1,17 @@
-import { withFormik } from "formik";
-import React, { useEffect, useState } from "react";
+import { withFormik, InjectedFormikProps } from "formik";
+import React, { SyntheticEvent, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router";
 import * as Yup from "yup";
+import { RootState } from "../../../..";
 import { saveUserInStore } from "../../../../redux/actions";
 import { updateUser } from "../../apis";
+import { FormValues, FormProps } from "./interface";
 
-function FormSettings(props: any) {
+function FormSettings(props: InjectedFormikProps<FormProps, FormValues>) {
   const dispatch = useDispatch();
   const history = useHistory();
-  const user = useSelector((state: any) => state.user.data);
+  const user = useSelector((state: RootState) => state.user.data);
   const { setFieldValue } = props;
 
   useEffect(() => {
@@ -22,14 +24,13 @@ function FormSettings(props: any) {
   const [error, setError] = useState();
   const token = window.localStorage.getItem("jwtToken");
 
-  const handleSubmit = (e: any) => {
+  const handleSubmit = (e: SyntheticEvent) => {
     e.preventDefault();
     const { imageURL, bio, username, email, password } = props.values;
     console.log({ input: props.values });
 
     updateUser({ imageURL, bio, username, email, password }, token)
-      .then((res: any) => {
-        console.log(res);
+      .then((res) => {
         const user = res.data.user;
         dispatch(saveUserInStore.saveUserInStoreSuccess(user));
         history.push(`/${user.username}`);
@@ -117,7 +118,7 @@ function FormSettings(props: any) {
 }
 
 const FormikFormSettings = withFormik({
-  mapPropsToValues(props: any) {
+  mapPropsToValues() {
     // Init form field
     return {
       imageURL: "",
@@ -132,6 +133,7 @@ const FormikFormSettings = withFormik({
     username: Yup.string().required("Username is required"),
     email: Yup.string().email().required("Email is required"),
   }),
-} as any)(FormSettings);
+  handleSubmit: () => {},
+})(FormSettings);
 
 export default FormikFormSettings;
