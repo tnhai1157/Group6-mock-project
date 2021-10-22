@@ -6,6 +6,7 @@ export default function ArticleItem({ feed }: any) {
   const token = window.localStorage.getItem("jwtToken");
   const [likeCount, setLikeCount] = useState<number>(feed?.favoritesCount);
   const [likeState, setLikeState] = useState<boolean>(feed?.favorited);
+
   const handleLike = (slug: string) => {
     if (token) {
       if (likeState) {
@@ -36,6 +37,7 @@ export default function ArticleItem({ feed }: any) {
               ? feed.author.image
               : "https://static.productionready.io/images/smiley-cyrus.jpg"
           }
+          alt=""
         />
         <div className="info">
           <NavLink to={"/profile/" + feed?.author?.username}>

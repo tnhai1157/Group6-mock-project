@@ -75,7 +75,7 @@ function App() {
         ></GuardedRoute>
         <GuardedRoute
           // path={`/${user?.username}`}
-          path={`/${user.username}`}
+          path={`/profile/${user.username}`}
           auth={window.localStorage.getItem("jwtToken")}
           Component={Profile}
         ></GuardedRoute>

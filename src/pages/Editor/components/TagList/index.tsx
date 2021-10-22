@@ -9,7 +9,7 @@ export default function TagList({ tags, setTags }: any) {
 
   return (
     <div className="tag-list">
-      {tags.map((tag: any, index: any) => (
+      {tags?.map((tag: any, index: any) => (
         <span
           ng-repeat="tag in $ctrl.article.tagList"
           className="tag-default tag-pill ng-binding ng-scope"

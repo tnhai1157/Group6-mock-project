@@ -8,7 +8,7 @@ export default function Articles() {
   const { slug }: any = useParams();
   const token = window.localStorage.getItem("jwtToken");
   const [article, setArticle] = useState<any>();
-  const [checkAuthor, setCheckAuthor] = useState(false);
+  const [checkAuthor, setCheckAuthor] = useState(true);
   const history = useHistory();
 
   useEffect(() => {

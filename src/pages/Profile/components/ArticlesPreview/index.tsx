@@ -7,8 +7,7 @@ import ArticlePreview from "../../../Home/components/ArticlePreview";
 
 export default function ArticlesPreview() {
   const [articles, setArticles] = useState();
-  const token = window.localStorage.getItem("jwtToken");
-  const user = useSelector((state: any) => state.user.data.user);
+  const user = useSelector((state: any) => state.user.data);
   const { url } = useRouteMatch();
 
   const handleClickYourFeed = () => {
