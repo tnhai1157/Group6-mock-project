@@ -1,4 +1,5 @@
 import axios from "axios";
+import { Data } from "../interfaces";
 
 export const URL = "http://localhost:3000";
 
@@ -19,7 +20,7 @@ export const listArticles = (token: any) =>
   });
 
 export const userByToken = (token: any) =>
-  axios.get(`${URL}/api/user`, {
+  axios.get<Data>(`${URL}/api/user`, {
     headers: {
       "Content-Type": "application/json",
       Authorization: `Bearer ${token}`,

@@ -1,16 +1,20 @@
 import axios from "axios";
 import { URL } from "../../../apis";
+import { Data, UserNotFullFieldRequire } from "../../../interfaces";
 
-export const updateUser = (payload: any, token: any) =>
-  axios.put(
+export const updateUser = (
+  user: UserNotFullFieldRequire,
+  token: string | null
+) =>
+  axios.put<Data>(
     `${URL}/api/user`,
     {
       user: {
-        image: payload.imageURL,
-        bio: payload.bio,
-        username: payload.username,
-        email: payload.email,
-        password: payload.password,
+        image: user.imageURL,
+        bio: user.bio,
+        username: user.username,
+        email: user.email,
+        password: user.password,
       },
       "Access-Control-Allow-Origin": "*",
       "Access-Control-Allow-Credentials": true,

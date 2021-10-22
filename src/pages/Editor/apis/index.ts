@@ -1,8 +1,9 @@
+import { DataArticle } from "./../../../interfaces/index";
 import axios from "axios";
 import { URL } from "../../../apis";
 
 export const postArticle = (article: any, tags: any, token: string | null) =>
-  axios.post(
+  axios.post<DataArticle>(
     `${URL}/api/articles`,
     {
       article: {
@@ -21,7 +22,7 @@ export const postArticle = (article: any, tags: any, token: string | null) =>
   );
 
 export const getArticleBySlug = (slug: any) =>
-  axios.get(`${URL}/api/articles/${slug}`, {
+  axios.get<DataArticle>(`${URL}/api/articles/${slug}`, {
     headers: {
       "Content-Type": "application/json",
     },
@@ -33,7 +34,7 @@ export const putArticle = (
   token: string | null,
   slug: any
 ) =>
-  axios.put(
+  axios.put<DataArticle>(
     `${URL}/api/articles/${slug}`,
     {
       article: {

@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./App.css";
 import Editor from "./pages/Editor";
 import Footer from "./components/Footer";
@@ -17,18 +17,19 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 import SignUp from "./pages/SignUp";
 import GuardedRoute from "./components/Route/GaurdRoute";
-import { getUserByToken, saveUserInStore } from "./redux/actions";
+import { saveUserInStore } from "./redux/actions";
 import { userByToken } from "./apis";
+import { RootState } from ".";
 
 function App() {
   const dispatch = useDispatch();
-  const user = useSelector((state: any) => state.user.data);
+  const user = useSelector((state: RootState) => state.user.data);
   const [loginState, setLoginState] = useState<boolean>(false);
   const token = window.localStorage.getItem("jwtToken");
 
   useEffect(() => {
     if (token && !user?.username) {
-      userByToken(token).then((res: any) => {
+      userByToken(token).then((res) => {
         const user = res.data.user;
         dispatch(saveUserInStore.saveUserInStoreSuccess(user));
       });

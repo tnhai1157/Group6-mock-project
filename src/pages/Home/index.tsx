@@ -1,33 +1,32 @@
 import { useEffect, useState } from "react";
 import { NavLink } from "react-router-dom";
+import { Article } from "../../interfaces";
 import { yourArticles, globalArticles } from "./apis/index";
 import ArticlePreview from "./components/ArticlePreview";
 import Tags from "./components/Tags";
 import { getArticleByTag, getTags } from "./components/Tags/apis";
 
 export default function Home({ userToken }: { userToken: boolean }) {
-  const [feeds, setFeeds] = useState();
-  const [tags, setTags] = useState();
-  const [tagName, setTagName] = useState("");
-  const token = window.localStorage.getItem("jwtToken");
+  const [feeds, setFeeds] = useState<Article[]>([]);
+  const [tags, setTags] = useState<String[]>([]);
+  const [tagName, setTagName] = useState<String>("");
+  const token = window.localStorage.getItem("jwtToken") as string;
 
   const handleClickYourFeed = () => {
     setTagName("");
-    yourArticles(token).then((res: any) => {
+    yourArticles(token).then((res) => {
       setFeeds(res.data.articles);
-      // console.log(res.data.articles);
     });
   };
 
   const handleClickGlobalFeed = () => {
-    globalArticles(token).then((res: any) => {
+    globalArticles(token).then((res) => {
       setFeeds(res.data.articles);
-      // console.log(res.data.articles);
     });
     setTagName("");
   };
-  const getArticlesByTag = (tag: string) => {
-    getArticleByTag(tag, token).then((res: any) => {
+  const getArticlesByTag = (tag: String) => {
+    getArticleByTag(tag, token).then((res) => {
       setFeeds(res.data.articles);
       setTagName(tag);
       // console.log(res.data.articles);
@@ -35,7 +34,7 @@ export default function Home({ userToken }: { userToken: boolean }) {
   };
 
   useEffect(() => {
-    getTags().then((res: any) => {
+    getTags().then((res) => {
       setTags(res.data.tags);
     });
     handleClickGlobalFeed();

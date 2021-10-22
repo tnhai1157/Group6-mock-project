@@ -1,9 +1,15 @@
 import React from "react";
 
-export default function TagList({ tags, setTags }: any) {
+export default function TagList({
+  tags,
+  setTags,
+}: {
+  tags: String[];
+  setTags: any;
+}) {
   const deleteTag = (index: any) => {
     setTags((prevState: any) =>
-      prevState.filter((tag: any, i: any) => i !== index)
+      prevState.filter((tag: String, i: Number) => i !== index)
     );
   };
 

@@ -1,28 +1,35 @@
-import React, { useEffect, useState } from "react";
-import { withFormik } from "formik";
+import React, {
+  ChangeEvent,
+  KeyboardEvent,
+  SyntheticEvent,
+  useEffect,
+  useState,
+} from "react";
+import { InjectedFormikProps, withFormik } from "formik";
 import * as Yup from "yup";
 import TagList from "./components/TagList";
 import { getArticleBySlug, postArticle, putArticle } from "./apis";
 import { useHistory, useParams } from "react-router";
+import { FormProps, FormValues, Slug } from "./interface";
 
-function Editor(props: any) {
+function Editor(props: InjectedFormikProps<FormProps, FormValues>) {
   const [input, setInput] = useState("");
-  const [tags, setTags] = useState<any>([]);
+  const [tags, setTags] = useState<String[]>([]);
   const [isKeyReleased, setIsKeyReleased] = useState(false);
   const token = window.localStorage.getItem("jwtToken");
-  const { slug }: any = useParams();
+  const { slug } = useParams<Slug>();
   const { setFieldValue } = props;
   const history = useHistory();
 
-  const handleSubmit = (e: any) => {
+  const handleSubmit = (e: SyntheticEvent) => {
     e.preventDefault();
     if (!slug) {
-      postArticle(props.values, tags, token).then((res: any) => {
+      postArticle(props.values, tags, token).then((res) => {
         const slug = res.data.article.slug;
         history.push(`/article/${slug}`);
       });
     } else {
-      putArticle(props.values, tags, token, slug).then((res: any) => {
+      putArticle(props.values, tags, token, slug).then((res) => {
         history.push(`/article/${slug}`);
       });
     }
@@ -30,7 +37,7 @@ function Editor(props: any) {
 
   useEffect(() => {
     if (slug) {
-      getArticleBySlug(slug).then((res: any) => {
+      getArticleBySlug(slug).then((res) => {
         const article = res.data.article;
         setFieldValue("title", article.title);
         setFieldValue("description", article.description);
@@ -44,7 +51,7 @@ function Editor(props: any) {
     }
   }, [slug, setFieldValue]);
 
-  const onKeyDown = (e: any) => {
+  const onKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
     const { key } = e;
     const trimmedInput = input.trim();
 
@@ -54,14 +61,14 @@ function Editor(props: any) {
       !tags?.includes(trimmedInput)
     ) {
       e.preventDefault();
-      setTags((prevState: any) => [...prevState, trimmedInput]);
+      setTags((prevState) => [...prevState, trimmedInput]);
       setInput("");
     }
 
     if (key === "Backspace" && !input.length && tags.length) {
       e.preventDefault();
       const tagsCopy = [...tags];
-      const poppedTag = tagsCopy.pop();
+      const poppedTag = tagsCopy.pop() as string;
 
       setTags(tagsCopy);
       setInput(poppedTag);
@@ -70,7 +77,7 @@ function Editor(props: any) {
     setIsKeyReleased(false);
   };
 
-  const onChange = (e: any) => {
+  const onChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { value } = e.target;
     setInput(value);
   };
@@ -161,6 +168,7 @@ const FormikEditor = withFormik({
     description: Yup.string().required("Please provide a description"),
     content: Yup.string().required("Please provide content"),
   }),
-} as any)(Editor);
+  handleSubmit: () => {},
+})(Editor);
 
 export default FormikEditor;

@@ -1,24 +1,25 @@
 import { useEffect, useState } from "react";
 import { Route, useHistory, useParams } from "react-router";
 import { NavLink } from "react-router-dom";
+import { Article } from "../../interfaces";
 import Editor from "../Editor";
 import { deleteArticle, getArticle } from "./apis";
 
 export default function Articles() {
   const { slug }: any = useParams();
   const token = window.localStorage.getItem("jwtToken");
-  const [article, setArticle] = useState<any>();
+  const [article, setArticle] = useState<Article>();
   const [checkAuthor, setCheckAuthor] = useState(true);
   const history = useHistory();
 
   useEffect(() => {
-    getArticle(slug).then((res: any) => {
+    getArticle(slug).then((res) => {
       setArticle(res.data.article);
     });
   }, [slug]);
 
   const handleDelete = () => {
-    deleteArticle(slug, token).then((res: any) => {
+    deleteArticle(slug, token).then((res) => {
       history.push("");
     });
   };

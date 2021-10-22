@@ -1,15 +1,14 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { getArticleByTag } from "./apis";
 
 export default function Tags({
   tags,
   getArticlesByTag,
 }: {
-  tags: any;
-  getArticlesByTag: any;
+  tags: String[];
+  getArticlesByTag: (tag: String) => void;
 }) {
-  const handleClickTag = (tag: string) => {
+  const handleClickTag = (tag: String) => {
     getArticlesByTag(tag);
   };
   return (
@@ -18,8 +17,8 @@ export default function Tags({
         <p>Popular Tags</p>
         <div className="tag-list">
           {tags && tags.length > 0 ? (
-            tags.map((tag: any) => (
-              <span key={tag}>
+            tags.map((tag, i) => (
+              <span key={i}>
                 <Link
                   to=""
                   className="tag-pill tag-default"
