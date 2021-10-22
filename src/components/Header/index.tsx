@@ -4,6 +4,9 @@ import { Link, NavLink } from "react-router-dom";
 
 export default function Header({ userToken }: { userToken: boolean }) {
   const token = userToken;
+
+  const user = useSelector((state: any) => state.user?.data);
+
   return token ? (
     <div>
       {" "}
@@ -29,8 +32,9 @@ export default function Header({ userToken }: { userToken: boolean }) {
               </NavLink>
             </li>
             <li className="nav-item">
-              <NavLink className="nav-link" to="/profile">
-                <i className="ion-gear-a"></i>&nbsp;Profile
+              <NavLink className="nav-link" to={`/${user.username}`}>
+                <i className="ion-gear-a"></i>&nbsp;
+                {user?.username}
               </NavLink>
             </li>
           </ul>

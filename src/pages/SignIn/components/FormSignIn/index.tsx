@@ -1,35 +1,35 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { withFormik } from "formik";
 import * as Yup from "yup";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { useHistory } from "react-router-dom";
-import { getUser } from "../../redux/actions";
+import { postUsersSignIn } from "../../apis";
+import { saveUserInStore } from "../../../../redux/actions";
 
 function FormLogin(props: any) {
   const dispatch = useDispatch();
   const history = useHistory();
-  const user = useSelector((state: any) => state.user.data.user);
-  const [error, setError] = useState("");
-
-  useEffect(() => {
-    if (user) history.push("/");
-  }, [user, history]);
+  const [error, setError] = useState(false);
 
   const handleSubmit = (e: any) => {
     e.preventDefault();
     const { email, password } = props.values;
-    dispatch(
-      getUser.getUserRequest({
-        email: email,
-        password: password,
+    postUsersSignIn({ email, password })
+      .then((res: any) => {
+        const user = res.data.user;
+        history.push("/");
+        dispatch(saveUserInStore.saveUserInStoreSuccess({ user }));
+        window.localStorage.setItem("jwtToken", user.token);
       })
-    );
+      .catch((e) => setError(true));
   };
 
   return (
     <form onSubmit={handleSubmit}>
       <fieldset className="form-group">
-        <p className="error-messages">{error}</p>
+        <p className="error-messages">
+          {error && "Email or password is invalid"}
+        </p>
         <p className="error-messages">{props.errors.email}</p>
         <input
           className="form-control form-control-lg"
@@ -51,7 +51,12 @@ function FormLogin(props: any) {
           onChange={props.handleChange}
         />
       </fieldset>
-      <button className="btn btn-lg btn-primary pull-xs-right">Sign in</button>
+      <button
+        className="btn btn-lg btn-primary pull-xs-right"
+        disabled={!props.isValid || !props.values.email}
+      >
+        Sign in
+      </button>
     </form>
   );
 }

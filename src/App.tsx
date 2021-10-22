@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import "./App.css";
 import Editor from "./pages/Editor";
 import Footer from "./components/Footer";
@@ -14,19 +14,34 @@ import {
   Route,
   Redirect,
 } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import SignUp from "./pages/SignUp";
 import GuardedRoute from "./components/Route/GaurdRoute";
+import { getUserByToken, saveUserInStore } from "./redux/actions";
+import { userByToken } from "./apis";
 
 function App() {
-  const user = useSelector((state: any) => state.user.data.user);
+  const dispatch = useDispatch();
+  const user = useSelector((state: any) => state.user.data);
   const [loginState, setLoginState] = useState<boolean>(false);
+  const token = window.localStorage.getItem("jwtToken");
+
   useEffect(() => {
-    if (user) {
-      window.localStorage.setItem("jwtToken", user.token);
+    if (token && !user?.username) {
+      userByToken(token).then((res: any) => {
+        const user = res.data.user;
+        dispatch(saveUserInStore.saveUserInStoreSuccess(user));
+      });
     }
-    const userToken = window.localStorage.getItem("jwtToken");
-    if (userToken) setLoginState(true);
+  }, [token, user, dispatch]);
+
+  useEffect(() => {
+    const token = window.localStorage.getItem("jwtToken");
+    if (token) {
+      setLoginState(true);
+    } else {
+      setLoginState(false);
+    }
   }, [user]);
 
   return (
@@ -59,7 +74,8 @@ function App() {
           Component={Settings}
         ></GuardedRoute>
         <GuardedRoute
-          path="/profile"
+          // path={`/${user?.username}`}
+          path={`/${user.username}`}
           auth={window.localStorage.getItem("jwtToken")}
           Component={Profile}
         ></GuardedRoute>

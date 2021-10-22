@@ -1,7 +1,7 @@
 import axios from "axios";
 import { URL } from "../../../apis";
 
-export const postUsersLogin = (payload: any) =>
+export const postUsersSignIn = (payload: any) =>
   axios.post(
     `${URL}/api/users/login`,
     {

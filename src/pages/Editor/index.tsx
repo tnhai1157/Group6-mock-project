@@ -11,6 +11,9 @@ function Editor(props: any) {
   const [tags, setTags] = useState<any>([]);
   const [isKeyReleased, setIsKeyReleased] = useState(false);
   const token = window.localStorage.getItem("jwtToken");
+  const [article, setArticle] = useState<any>();
+  const { slug }: any = useParams();
+
   const handleSubmit = (e: any) => {
     e.preventDefault();
     console.log(props.values, tags);
@@ -18,13 +21,13 @@ function Editor(props: any) {
       console.log(res.data);
     });
   };
-  const [article, setArticle] = useState<any>();
-  const { slug }: any = useParams();
+
   useEffect(() => {
     if (slug) {
       console.log(slug);
     } else console.log("no slug");
   }, [slug]);
+
   const onKeyDown = (e: any) => {
     const { key } = e;
     const trimmedInput = input.trim();
@@ -56,15 +59,6 @@ function Editor(props: any) {
     setInput(value);
   };
 
-  const handlePressSpaceTags = (e: any) => {
-    console.log({ key: e.key });
-    if (e.key === " ") {
-      // setTags((prevState: any) => [...prevState, props.values.tags]);
-      console.log({ inputTag: props.values.tags });
-      props.values.tags = "";
-    }
-  };
-
   const onKeyUp = () => {
     setIsKeyReleased(true);
   };
@@ -89,8 +83,8 @@ function Editor(props: any) {
                 </fieldset>
                 <fieldset className="form-group">
                   <p className="error-messages">{props.errors.description}</p>
-                  <input
-                    type="text"
+                  <textarea
+                    rows={6}
                     className="form-control"
                     placeholder="What's this article about?"
                     name="description"
@@ -101,6 +95,7 @@ function Editor(props: any) {
                 <fieldset className="form-group">
                   <p className="error-messages">{props.errors.content}</p>
                   <textarea
+                    rows={6}
                     className="form-control"
                     placeholder="Write your article (in markdown)"
                     name="content"
