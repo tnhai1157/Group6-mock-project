@@ -127,7 +127,11 @@ export default function Home({ userToken }: { userToken: boolean }) {
                 {token ? (
                   <li className="nav-item">
                     <NavLink
-                      className="nav-link"
+                      className={
+                        nameApiToLoad === "Your"
+                          ? "nav-link active"
+                          : "nav-link"
+                      }
                       to=""
                       activeClassName="selected"
                       onClick={handleClickYourFeed}
@@ -140,7 +144,11 @@ export default function Home({ userToken }: { userToken: boolean }) {
                 )}
                 <li className="nav-item">
                   <NavLink
-                    className="nav-link"
+                    className={
+                      nameApiToLoad === "Global"
+                        ? "nav-link active"
+                        : "nav-link"
+                    }
                     to=""
                     activeClassName="selected"
                     onClick={handleClickGlobalFeed}
@@ -151,7 +159,11 @@ export default function Home({ userToken }: { userToken: boolean }) {
                 {tagName ? (
                   <li className="nav-item">
                     <NavLink
-                      className="nav-link"
+                      className={
+                        nameApiToLoad === "Tags"
+                          ? "nav-link active"
+                          : "nav-link"
+                      }
                       to=""
                       activeClassName="selected"
                     >

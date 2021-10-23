@@ -80,7 +80,9 @@ export default function ArticlesPreview() {
               {
                 <li className="nav-item">
                   <NavLink
-                    className="nav-link"
+                    className={
+                      nameApiToLoad === "My" ? "nav-link active" : "nav-link"
+                    }
                     to={url}
                     activeClassName="selected"
                     onClick={handleClickYourFeed}
@@ -91,7 +93,11 @@ export default function ArticlesPreview() {
               }
               <li className="nav-item">
                 <NavLink
-                  className="nav-link"
+                  className={
+                    nameApiToLoad === "Favorited"
+                      ? "nav-link active"
+                      : "nav-link"
+                  }
                   to={url}
                   activeClassName="selected"
                   onClick={handleClickGlobalFeed}
