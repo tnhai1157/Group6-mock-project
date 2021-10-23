@@ -1,12 +1,9 @@
 import { useEffect, useState } from "react";
-import { Route, useHistory, useParams } from "react-router";
+import { useHistory, useParams } from "react-router";
 import { NavLink } from "react-router-dom";
-<<<<<<< HEAD
-import { Article } from "../../interfaces";
-=======
+import { Article, Profile } from "../../interfaces";
 import { userByToken } from "../../apis";
->>>>>>> devHaiTN7
-import Editor from "../Editor";
+
 import {
   deleteFavorite,
   postFavorite,
@@ -18,31 +15,26 @@ import {
   getArticle,
   postFollowing,
 } from "./apis";
+import { AxiosResponse } from "axios";
 
 export default function Articles() {
   const { slug }: any = useParams();
   const token = window.localStorage.getItem("jwtToken");
-<<<<<<< HEAD
   const [article, setArticle] = useState<Article>();
-  const [checkAuthor, setCheckAuthor] = useState(true);
-=======
-  const [article, setArticle] = useState<any>();
   const [checkAuthor, setCheckAuthor] = useState(false);
-  const [likeCount, setLikeCount] = useState<number>(article?.favoritesCount);
+  const [likeCount, setLikeCount] = useState<number | undefined>(
+    article?.favoritesCount
+  );
   const [likeState, setLikeState] = useState<boolean>();
->>>>>>> devHaiTN7
   const history = useHistory();
   const [followState, setFollowState] = useState<boolean>();
   useEffect(() => {
-<<<<<<< HEAD
-    getArticle(slug).then((res) => {
-      setArticle(res.data.article);
-=======
-    getArticle(slug, token).then((responseArticle: any) => {
-      // console.log(responseArticle.data.article);
+    getArticle(slug, token).then((responseArticle) => {
+      console.log(responseArticle);
       setArticle(responseArticle.data.article);
       setLikeState(responseArticle.data.article?.favorited);
-      userByToken(token).then((responseUser: any) => {
+      setLikeCount(responseArticle.data.article?.favoritesCount);
+      userByToken(token).then((responseUser) => {
         if (
           responseUser.data.user.username ==
           responseArticle.data.article.author.username
@@ -51,37 +43,34 @@ export default function Articles() {
         else setCheckAuthor(false);
       });
       getProfile(token, responseArticle.data.article.author.username).then(
-        (res: any) => {
+        (res: AxiosResponse<any | Profile>) => {
           if (res.data.profile.following) setFollowState(true);
           else setFollowState(false);
         }
       );
->>>>>>> devHaiTN7
     });
   }, [slug]);
 
-  const handleFavorite = (slug: string) => {
+  const handleFavorite = (slug: string | undefined) => {
     if (likeState) {
       deleteFavorite(token, slug).then((res: any) => {
         setLikeCount(res.data.article?.favoritesCount);
         setLikeState(false);
       });
     } else {
-      postFavorite(token, slug).then((res: any) => {
+      postFavorite(token, slug).then((res) => {
         setLikeCount(res.data.article?.favoritesCount);
         setLikeState(true);
       });
     }
   };
-  const handleFollowing = (username: string) => {
+  const handleFollowing = (username: string | undefined) => {
     if (followState) {
-      deleteFollowing(token, username).then((res: any) => {
-        // setLikeCount(res.data.article?.favoritesCount);
+      deleteFollowing(token, username).then((res) => {
         setFollowState(false);
       });
     } else {
-      postFollowing(token, username).then((res: any) => {
-        // setLikeCount(res.data.article?.favoritesCount);
+      postFollowing(token, username).then((res) => {
         setFollowState(true);
       });
     }
@@ -254,9 +243,6 @@ export default function Articles() {
           </div>
         </div>
       </div>
-      {/* <Route path="/editor/:slug">
-        <Editor />
-      </Route> */}
     </div>
   );
 }

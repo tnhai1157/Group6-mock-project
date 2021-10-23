@@ -3,40 +3,26 @@ import { DataArticles } from "../../../interfaces";
 
 export const URL = "http://localhost:3000";
 
-<<<<<<< HEAD
-export const myArticles = (author: string) =>
+export const myArticles = (author: string, token: string | null) =>
   axios.get<DataArticles>(`${URL}/api/articles/?author=${author}`, {
     headers: {
       "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
     },
   });
 
-export const favoritedArticles = (author: string) =>
+export const favoritedArticles = (author: string, token: string | null) =>
   axios.get<DataArticles>(`${URL}/api/articles/?favorited=${author}`, {
     headers: {
       "Content-Type": "application/json",
-=======
-export const myArticles = (author: any, token: any) =>
-  axios.get(`${URL}/api/articles/?author=${author}`, {
-    headers: {
-      "Content-Type": "application/json",
       Authorization: `Bearer ${token}`,
     },
   });
 
-export const favoritedArticles = (author: any, token: any) =>
-  axios.get(`${URL}/api/articles/?favorited=${author}`, {
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${token}`,
-    },
-  });
-
-export const getProfile = (token: any, username: any) =>
+export const getProfile = (token: string | null, username: string) =>
   axios.get(`${URL}/api/profiles/${username}`, {
     headers: {
       "Content-Type": "application/json",
       Authorization: `Bearer ${token}`,
->>>>>>> devHaiTN7
     },
   });

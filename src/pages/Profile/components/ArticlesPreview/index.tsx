@@ -4,47 +4,29 @@ import { favoritedArticles, myArticles } from "../../apis";
 import { useRouteMatch } from "react-router-dom";
 import { useSelector } from "react-redux";
 import ArticlePreview from "../../../Home/components/ArticlePreview";
-import { RootState } from "../../../..";
 import { Article } from "../../../../interfaces";
+import { RootState } from "../../../..";
 
 export default function ArticlesPreview() {
-<<<<<<< HEAD
   const [articles, setArticles] = useState<Article[]>([]);
+  const token = window.localStorage.getItem("jwtToken");
   const user = useSelector((state: RootState) => state.user.data);
   const { url } = useRouteMatch();
 
   const handleClickYourFeed = () => {
-    myArticles(user?.username).then((res) => {
-      console.log(res.data.articles);
-=======
-  const [articles, setArticles] = useState();
-  const token = window.localStorage.getItem("jwtToken");
-  const user = useSelector((state: any) => state.user.data);
-  const { url } = useRouteMatch();
-
-  const handleClickYourFeed = () => {
-    myArticles(user?.username, token).then((res: any) => {
->>>>>>> devHaiTN7
+    myArticles(user?.username, token).then((res) => {
       setArticles(res.data.articles);
     });
   };
 
   const handleClickGlobalFeed = () => {
-<<<<<<< HEAD
-    favoritedArticles(user?.username).then((res) => {
-=======
-    favoritedArticles(user?.username, token).then((res: any) => {
->>>>>>> devHaiTN7
+    favoritedArticles(user?.username, token).then((res) => {
       setArticles(res.data.articles);
     });
   };
 
   useEffect(() => {
-<<<<<<< HEAD
-    myArticles(user?.username).then((res) => {
-=======
-    myArticles(user?.username, token).then((res: any) => {
->>>>>>> devHaiTN7
+    myArticles(user?.username, token).then((res) => {
       setArticles(res.data.articles);
     });
   }, [user?.username]);
