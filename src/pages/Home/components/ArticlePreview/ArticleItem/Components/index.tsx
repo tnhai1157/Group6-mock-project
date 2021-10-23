@@ -21,12 +21,6 @@ export default function ArticleItem({ feed }: { feed: Article }) {
           setLikeState(true);
         });
       }
-      // postFavorite(token, slug).then((res: any) => {
-      //   setLikeCount(res.data.article?.favoritesCount);
-      // });
-      // deleteFavorite(token, slug).then((res: any) => {
-      //   setLikeCount(res.data.article?.favoritesCount);
-      // });
     }
   };
   return (

@@ -1,28 +1,86 @@
 import { useEffect, useState } from "react";
-import { Route, useHistory, useParams } from "react-router";
+import { useHistory, useParams } from "react-router";
 import { NavLink } from "react-router-dom";
-import { Article } from "../../interfaces";
-import Editor from "../Editor";
-import { deleteArticle, getArticle } from "./apis";
+import { Article, Profile } from "../../interfaces";
+import { userByToken } from "../../apis";
+
+import {
+  deleteFavorite,
+  postFavorite,
+} from "../Home/components/ArticlePreview/ArticleItem/apis";
+import { getProfile } from "../Profile/apis";
+import {
+  deleteArticle,
+  deleteFollowing,
+  getArticle,
+  postFollowing,
+} from "./apis";
+import { AxiosResponse } from "axios";
 
 export default function Articles() {
   const { slug }: any = useParams();
   const token = window.localStorage.getItem("jwtToken");
   const [article, setArticle] = useState<Article>();
-  const [checkAuthor, setCheckAuthor] = useState(true);
+  const [checkAuthor, setCheckAuthor] = useState(false);
+  const [likeCount, setLikeCount] = useState<number | undefined>(
+    article?.favoritesCount
+  );
+  const [likeState, setLikeState] = useState<boolean>();
   const history = useHistory();
-
+  const [followState, setFollowState] = useState<boolean>();
   useEffect(() => {
-    getArticle(slug).then((res) => {
-      setArticle(res.data.article);
+    getArticle(slug, token).then((responseArticle) => {
+      console.log(responseArticle);
+      setArticle(responseArticle.data.article);
+      setLikeState(responseArticle.data.article?.favorited);
+      setLikeCount(responseArticle.data.article?.favoritesCount);
+      userByToken(token).then((responseUser) => {
+        if (
+          responseUser.data.user.username ==
+          responseArticle.data.article.author.username
+        )
+          setCheckAuthor(true);
+        else setCheckAuthor(false);
+      });
+      getProfile(token, responseArticle.data.article.author.username).then(
+        (res: AxiosResponse<any | Profile>) => {
+          if (res.data.profile.following) setFollowState(true);
+          else setFollowState(false);
+        }
+      );
     });
   }, [slug]);
 
+  const handleFavorite = (slug: string | undefined) => {
+    if (likeState) {
+      deleteFavorite(token, slug).then((res: any) => {
+        setLikeCount(res.data.article?.favoritesCount);
+        setLikeState(false);
+      });
+    } else {
+      postFavorite(token, slug).then((res) => {
+        setLikeCount(res.data.article?.favoritesCount);
+        setLikeState(true);
+      });
+    }
+  };
+  const handleFollowing = (username: string | undefined) => {
+    if (followState) {
+      deleteFollowing(token, username).then((res) => {
+        setFollowState(false);
+      });
+    } else {
+      postFollowing(token, username).then((res) => {
+        setFollowState(true);
+      });
+    }
+  };
   const handleDelete = () => {
     deleteArticle(slug, token).then((res) => {
       history.push("");
     });
   };
+
   return (
     <div className="article-page">
       <div className="banner">
@@ -64,18 +122,29 @@ export default function Articles() {
                   </div>
                 ) : (
                   <div>
-                    <button className="btn btn-sm btn-outline-secondary">
-                      <i className="ion-plus-round"></i>
-                      &nbsp; Follow {article?.author?.username}
+                    <button
+                      className="btn btn-sm btn-outline-secondary"
+                      onClick={() => handleFollowing(article?.author?.username)}
+                    >
+                      {followState ? (
+                        <i></i>
+                      ) : (
+                        <i className="ion-plus-round"></i>
+                      )}
+                      &nbsp;{" "}
+                      {followState
+                        ? `Unfollow ${article?.author?.username}`
+                        : `Follow ${article?.author?.username}`}
                       <span className="counter"></span>
                     </button>
                     &nbsp;&nbsp;
-                    <button className="btn btn-sm btn-outline-primary">
-                      <i className="ion-heart"></i>
-                      &nbsp; Favorite Post{" "}
-                      <span className="counter">
-                        ({article?.favoritesCount})
-                      </span>
+                    <button
+                      className="btn btn-sm btn-outline-primary"
+                      onClick={() => handleFavorite(article?.slug)}
+                    >
+                      {likeState ? <i></i> : <i className="ion-heart"></i>}
+                      &nbsp; {likeState ? "Unfavorite Post" : "Favorite Post"}
+                      <span className="counter">({likeCount})</span>
                     </button>
                   </div>
                 )}
@@ -174,9 +243,6 @@ export default function Articles() {
           </div>
         </div>
       </div>
-      {/* <Route path="/editor/:slug">
-        <Editor />
-      </Route> */}
     </div>
   );
 }

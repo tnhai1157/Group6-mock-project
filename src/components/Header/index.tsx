@@ -1,15 +1,13 @@
-import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import { Link, NavLink } from "react-router-dom";
+import { NavLink } from "react-router-dom";
+import { RootState } from "../..";
 
 export default function Header({ userToken }: { userToken: boolean }) {
   const token = userToken;
-
-  const user = useSelector((state: any) => state.user?.data);
+  const user = useSelector((state: RootState) => state.user?.data);
 
   return token ? (
     <div>
-      {" "}
       <nav className="navbar navbar-light">
         <div className="container">
           <NavLink className="navbar-brand" to="/">
@@ -43,7 +41,6 @@ export default function Header({ userToken }: { userToken: boolean }) {
     </div>
   ) : (
     <div>
-      {" "}
       <nav className="navbar navbar-light">
         <div className="container">
           <NavLink className="navbar-brand" to="/">

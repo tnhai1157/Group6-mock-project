@@ -4,7 +4,7 @@ import { Article } from "../../../../../../interfaces";
 
 const URL = "http://localhost:3000";
 
-export const postFavorite = (token: String, slug: String) =>
+export const postFavorite = (token: String | null, slug: String | undefined) =>
   axios.post<DataArticle>(
     `${URL}/api/articles/${slug}/favorite`,
     {
@@ -19,7 +19,10 @@ export const postFavorite = (token: String, slug: String) =>
     }
   );
 
-export const deleteFavorite = (token: String, slug: String) =>
+export const deleteFavorite = (
+  token: String | null,
+  slug: String | undefined
+) =>
   axios.delete<DataArticle>(`${URL}/api/articles/${slug}/favorite`, {
     headers: {
       "Content-Type": "application/json",
