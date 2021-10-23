@@ -34,6 +34,7 @@ export interface Article {
 
 export interface DataArticles {
   articles: Article[];
+  articlesCount: number;
 }
 
 export interface DataArticle {

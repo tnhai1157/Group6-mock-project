@@ -29,7 +29,7 @@ export default function ArticlesPreview() {
     myArticles(user?.username, token).then((res) => {
       setArticles(res.data.articles);
     });
-  }, [user?.username]);
+  }, [user?.username, token]);
 
   return (
     <div className="container">
