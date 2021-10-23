@@ -17,7 +17,7 @@ import {
 
 export default function Articles() {
   const { slug }: any = useParams();
-  const token = window.localStorage.getItem("jwtToken");
+  const token = window.localStorage.getItem("jwtToken") as String;
   const [article, setArticle] = useState<any>();
   const [checkAuthor, setCheckAuthor] = useState(false);
   const [likeCount, setLikeCount] = useState<number>(article?.favoritesCount);
