@@ -124,7 +124,7 @@ export default function Home({ userToken }: { userToken: boolean }) {
           <div className="col-md-9">
             <div className="feed-toggle">
               <ul className="nav nav-pills outline-active">
-                {userToken ? (
+                {token ? (
                   <li className="nav-item">
                     <NavLink
                       className="nav-link"
@@ -166,7 +166,7 @@ export default function Home({ userToken }: { userToken: boolean }) {
             <ArticlePreview feeds={feeds} />
 
             {count > LIMIT && (
-              <Row className="justify-content-center">
+              <Row style={{ display: "flex", justifyContent: "center" }}>
                 <Paginate
                   pageNumber={Math.ceil(count / LIMIT)}
                   currentPage={currentPage}
