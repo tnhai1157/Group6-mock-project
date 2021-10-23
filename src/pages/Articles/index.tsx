@@ -1,9 +1,8 @@
 import { useEffect, useState } from "react";
-import { useHistory, useParams } from "react-router";
+import { Route, useHistory, useParams } from "react-router";
 import { NavLink } from "react-router-dom";
-import { Article, Profile } from "../../interfaces";
 import { userByToken } from "../../apis";
-
+import Editor from "../Editor";
 import {
   deleteFavorite,
   postFavorite,
@@ -15,26 +14,22 @@ import {
   getArticle,
   postFollowing,
 } from "./apis";
-import { AxiosResponse } from "axios";
 
 export default function Articles() {
   const { slug }: any = useParams();
   const token = window.localStorage.getItem("jwtToken");
-  const [article, setArticle] = useState<Article>();
+  const [article, setArticle] = useState<any>();
   const [checkAuthor, setCheckAuthor] = useState(false);
-  const [likeCount, setLikeCount] = useState<number | undefined>(
-    article?.favoritesCount
-  );
+  const [likeCount, setLikeCount] = useState<number>(article?.favoritesCount);
   const [likeState, setLikeState] = useState<boolean>();
   const history = useHistory();
   const [followState, setFollowState] = useState<boolean>();
   useEffect(() => {
-    getArticle(slug, token).then((responseArticle) => {
-      console.log(responseArticle);
+    getArticle(slug, token).then((responseArticle: any) => {
+      // console.log(responseArticle.data.article);
       setArticle(responseArticle.data.article);
       setLikeState(responseArticle.data.article?.favorited);
-      setLikeCount(responseArticle.data.article?.favoritesCount);
-      userByToken(token).then((responseUser) => {
+      userByToken(token).then((responseUser: any) => {
         if (
           responseUser.data.user.username ==
           responseArticle.data.article.author.username
@@ -43,7 +38,7 @@ export default function Articles() {
         else setCheckAuthor(false);
       });
       getProfile(token, responseArticle.data.article.author.username).then(
-        (res: AxiosResponse<any | Profile>) => {
+        (res: any) => {
           if (res.data.profile.following) setFollowState(true);
           else setFollowState(false);
         }
@@ -51,26 +46,28 @@ export default function Articles() {
     });
   }, [slug]);
 
-  const handleFavorite = (slug: string | undefined) => {
+  const handleFavorite = (slug: string) => {
     if (likeState) {
       deleteFavorite(token, slug).then((res: any) => {
         setLikeCount(res.data.article?.favoritesCount);
         setLikeState(false);
       });
     } else {
-      postFavorite(token, slug).then((res) => {
+      postFavorite(token, slug).then((res: any) => {
         setLikeCount(res.data.article?.favoritesCount);
         setLikeState(true);
       });
     }
   };
-  const handleFollowing = (username: string | undefined) => {
+  const handleFollowing = (username: string) => {
     if (followState) {
-      deleteFollowing(token, username).then((res) => {
+      deleteFollowing(token, username).then((res: any) => {
+        // setLikeCount(res.data.article?.favoritesCount);
         setFollowState(false);
       });
     } else {
-      postFollowing(token, username).then((res) => {
+      postFollowing(token, username).then((res: any) => {
+        // setLikeCount(res.data.article?.favoritesCount);
         setFollowState(true);
       });
     }
@@ -243,6 +240,9 @@ export default function Articles() {
           </div>
         </div>
       </div>
+      {/* <Route path="/editor/:slug">
+        <Editor />
+      </Route> */}
     </div>
   );
 }

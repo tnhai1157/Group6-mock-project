@@ -3,14 +3,19 @@ import axios from "axios";
 
 const URL = "http://localhost:3000";
 
-export const getArticle = (slug: String, token: String | null) =>
+<<<<<<< HEAD
+export const getArticle = (slug: String) =>
   axios.get<DataArticle>(`${URL}/api/articles/${slug}`, {
+=======
+export const getArticle = (slug: any, token: any) =>
+  axios.get(`${URL}/api/articles/${slug}`, {
+>>>>>>> devHaiTN7
     headers: {
       "Content-Type": "application/json",
       Authorization: `Bearer ${token}`,
     },
   });
-export const deleteArticle = (slug: String, token: string | null) =>
+export const deleteArticle = (slug: string, token: string | null) =>
   axios.delete<DataArticle>(`${URL}/api/articles/${slug}`, {
     headers: {
       "Content-Type": "application/json",
@@ -18,10 +23,7 @@ export const deleteArticle = (slug: String, token: string | null) =>
     },
   });
 
-export const postFollowing = (
-  token: String | null,
-  username: String | undefined
-) =>
+export const postFollowing = (token: any, username: any) =>
   axios.post(
     `${URL}/api/profiles/${username}/follow`,
     {
@@ -36,10 +38,7 @@ export const postFollowing = (
     }
   );
 
-export const deleteFollowing = (
-  token: String | null,
-  username: String | undefined
-) =>
+export const deleteFollowing = (token: any, username: any) =>
   axios.delete(`${URL}/api/profiles/${username}/follow`, {
     headers: {
       "Content-Type": "application/json",

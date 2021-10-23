@@ -1,24 +1,16 @@
 import { useEffect, useState } from "react";
 import { NavLink } from "react-router-dom";
 import { Article } from "../../interfaces";
-import {
-  yourArticles,
-  globalArticles,
-  globalArticlesNoToken,
-} from "./apis/index";
+import { yourArticles, globalArticles } from "./apis/index";
 import ArticlePreview from "./components/ArticlePreview";
 import Tags from "./components/Tags";
-import {
-  getArticleByTag,
-  getArticleByTagNoToken,
-  getTags,
-} from "./components/Tags/apis";
+import { getArticleByTag, getTags } from "./components/Tags/apis";
 
 export default function Home({ userToken }: { userToken: boolean }) {
   const [feeds, setFeeds] = useState<Article[]>([]);
   const [tags, setTags] = useState<String[]>([]);
   const [tagName, setTagName] = useState<String>("");
-  const token = window.localStorage.getItem("jwtToken");
+  const token = window.localStorage.getItem("jwtToken") as string;
 
   const handleClickYourFeed = () => {
     setTagName("");
@@ -28,30 +20,17 @@ export default function Home({ userToken }: { userToken: boolean }) {
   };
 
   const handleClickGlobalFeed = () => {
-    if (token) {
-      globalArticles(token).then((res) => {
-        setFeeds(res.data.articles);
-      });
-    } else {
-      globalArticlesNoToken().then((res) => {
-        setFeeds(res.data.articles);
-      });
-    }
-
+    globalArticles(token).then((res) => {
+      setFeeds(res.data.articles);
+    });
     setTagName("");
   };
   const getArticlesByTag = (tag: String) => {
-    if (token) {
-      getArticleByTag(tag, token).then((res) => {
-        setFeeds(res.data.articles);
-        setTagName(tag);
-      });
-    } else {
-      getArticleByTagNoToken(tag).then((res) => {
-        setFeeds(res.data.articles);
-        setTagName(tag);
-      });
-    }
+    getArticleByTag(tag, token).then((res) => {
+      setFeeds(res.data.articles);
+      setTagName(tag);
+      // console.log(res.data.articles);
+    });
   };
 
   useEffect(() => {
