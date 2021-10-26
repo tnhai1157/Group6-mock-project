@@ -12,12 +12,15 @@ import {
   deleteArticle,
   deleteFollowing,
   getArticle,
+  getArticleNoToken,
   postFollowing,
 } from "./apis";
+import { AxiosResponse } from "axios";
+import Comment from "./Components/Comment";
 
 export default function Articles() {
   const { slug }: any = useParams();
-  const token = window.localStorage.getItem("jwtToken") as String;
+  const token = window.localStorage.getItem("jwtToken") as string;
   const [article, setArticle] = useState<any>();
   const [checkAuthor, setCheckAuthor] = useState(false);
   const [likeCount, setLikeCount] = useState<number>(article?.favoritesCount);
@@ -25,25 +28,31 @@ export default function Articles() {
   const history = useHistory();
   const [followState, setFollowState] = useState<boolean>();
   useEffect(() => {
-    getArticle(slug, token).then((responseArticle: any) => {
-      // console.log(responseArticle.data.article);
-      setArticle(responseArticle.data.article);
-      setLikeState(responseArticle.data.article?.favorited);
-      userByToken(token).then((responseUser: any) => {
-        if (
-          responseUser.data.user.username ==
-          responseArticle.data.article.author.username
-        )
-          setCheckAuthor(true);
-        else setCheckAuthor(false);
+    if (token) {
+      getArticle(slug, token).then((responseArticle) => {
+        setArticle(responseArticle.data.article);
+        setLikeState(responseArticle.data.article?.favorited);
+        setLikeCount(responseArticle.data.article?.favoritesCount);
+        userByToken(token).then((responseUser) => {
+          if (
+            responseUser.data.user.username ==
+            responseArticle.data.article.author.username
+          )
+            setCheckAuthor(true);
+          else setCheckAuthor(false);
+        });
+        getProfile(token, responseArticle.data.article.author.username).then(
+          (res: AxiosResponse<any>) => {
+            if (res.data.profile.following) setFollowState(true);
+            else setFollowState(false);
+          }
+        );
       });
-      getProfile(token, responseArticle.data.article.author.username).then(
-        (res: any) => {
-          if (res.data.profile.following) setFollowState(true);
-          else setFollowState(false);
-        }
-      );
-    });
+    } else {
+      getArticleNoToken(slug).then((res: any) => {
+        setArticle(res.data.article);
+      });
+    }
   }, [slug]);
 
   const handleFavorite = (slug: string) => {
@@ -170,75 +179,7 @@ export default function Articles() {
           ))}
         </div>
         <hr />
-        <div className="row">
-          <div className="col-xs-12 col-md-8 offset-md-2">
-            <form className="card comment-form">
-              <div className="card-block">
-                <textarea
-                  className="form-control"
-                  placeholder="Write a comment..."
-                  rows={3}
-                ></textarea>
-              </div>
-              <div className="card-footer">
-                <img
-                  src="http://i.imgur.com/Qr71crq.jpg"
-                  className="comment-author-img"
-                  alt=""
-                />
-                <button className="btn btn-sm btn-primary">Post Comment</button>
-              </div>
-            </form>
-            <div className="card">
-              <div className="card-block">
-                <p className="card-text">
-                  With supporting text below as a natural lead-in to additional
-                  content.
-                </p>
-              </div>
-              <div className="card-footer">
-                <a href="" className="comment-author">
-                  <img
-                    src="http://i.imgur.com/Qr71crq.jpg"
-                    className="comment-author-img"
-                    alt=""
-                  />
-                </a>
-                &nbsp;
-                <a href="" className="comment-author">
-                  Jacob Schmidt
-                </a>
-                <span className="date-posted">Dec 29th</span>
-              </div>
-            </div>
-            <div className="card">
-              <div className="card-block">
-                <p className="card-text">
-                  With supporting text below as a natural lead-in to additional
-                  content.
-                </p>
-              </div>
-              <div className="card-footer">
-                <a href="" className="comment-author">
-                  <img
-                    src="http://i.imgur.com/Qr71crq.jpg"
-                    className="comment-author-img"
-                    alt=""
-                  />
-                </a>
-                &nbsp;
-                <a href="" className="comment-author">
-                  Jacob Schmidt
-                </a>
-                <span className="date-posted">Dec 29th</span>
-                <span className="mod-options">
-                  <i className="ion-edit"></i>
-                  <i className="ion-trash-a"></i>
-                </span>
-              </div>
-            </div>
-          </div>
-        </div>
+        <Comment slug={slug} />
       </div>
       {/* <Route path="/editor/:slug">
         <Editor />

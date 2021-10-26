@@ -1,16 +1,23 @@
-import { DataArticle } from "./../../../interfaces/index";
+import { Article, DataArticle } from "./../../../interfaces/index";
 import axios from "axios";
 
 const URL = "http://localhost:3000";
 
 export const getArticle = (slug: any, token: any) =>
-  axios.get(`${URL}/api/articles/${slug}`, {
+  axios.get<any>(`${URL}/api/articles/${slug}`, {
     headers: {
       "Content-Type": "application/json",
       Authorization: `Bearer ${token}`,
     },
   });
-export const deleteArticle = (slug: string, token: String | null) =>
+export const getArticleNoToken = (slug: String) =>
+  axios.get<DataArticle>(`${URL}/api/articles/${slug}`, {
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+
+export const deleteArticle = (slug: String, token: string | null) =>
   axios.delete<DataArticle>(`${URL}/api/articles/${slug}`, {
     headers: {
       "Content-Type": "application/json",

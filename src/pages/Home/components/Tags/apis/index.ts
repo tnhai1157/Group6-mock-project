@@ -15,3 +15,13 @@ export const getArticleByTag = (tag: String, token: String) =>
       tag: tag,
     },
   });
+
+export const getArticleByTagNoToken = (tag: String) =>
+  axios.get<DataArticles>(`${URL}/api/articles`, {
+    headers: {
+      "Content-Type": "application/json",
+    },
+    params: {
+      tag: tag,
+    },
+  });

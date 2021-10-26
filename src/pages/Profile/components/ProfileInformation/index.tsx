@@ -1,11 +1,16 @@
 import React from "react";
 import { useSelector } from "react-redux";
+import { useHistory } from "react-router";
 import { RootState } from "../../../..";
 import { IMG_NOAVATAR } from "../../../../constant";
 
 export default function ProfileInformation() {
   const user = useSelector((state: RootState) => state.user.data);
-  console.log(user);
+  const history = useHistory();
+
+  const handleClickEdit = () => {
+    history.push("/settings");
+  };
 
   return (
     <div className="profile-page">
@@ -20,7 +25,10 @@ export default function ProfileInformation() {
               )}
               <h4>{user?.username}</h4>
               <p>{user?.bio || "..."}</p>
-              <button className="btn btn-sm btn-outline-secondary action-btn">
+              <button
+                className="btn btn-sm btn-outline-secondary action-btn"
+                onClick={handleClickEdit}
+              >
                 <i className="ion-plus-round"></i>
                 &nbsp; Edit Profile Settings
               </button>
