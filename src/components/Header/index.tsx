@@ -15,7 +15,7 @@ export default function Header({ userToken }: { userToken: boolean }) {
           </NavLink>
           <ul className="nav navbar-nav pull-xs-right">
             <li className="nav-item">
-              <NavLink className="nav-link" to="/">
+              <NavLink className="nav-link" to="/" exact={true}>
                 Home
               </NavLink>
             </li>
