@@ -9,4 +9,4 @@ export const userByToken = (token: string | null) =>
       "Content-Type": "application/json",
       Authorization: `Bearer ${token}`,
     },
-  } as any);
+  });

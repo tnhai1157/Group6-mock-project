@@ -27,13 +27,12 @@ function FormSettings(props: InjectedFormikProps<FormProps, FormValues>) {
   const handleSubmit = (e: SyntheticEvent) => {
     e.preventDefault();
     const { imageURL, bio, username, email, password } = props.values;
-    console.log({ input: props.values });
 
     updateUser({ imageURL, bio, username, email, password }, token)
       .then((res) => {
         const user = res.data.user;
         dispatch(saveUserInStore.saveUserInStoreSuccess(user));
-        history.push(`/${user.username}`);
+        history.push(`/profile/${user.username}`);
       })
       .catch((e) => {
         const errorObject = { ...e.response.data.errors };
