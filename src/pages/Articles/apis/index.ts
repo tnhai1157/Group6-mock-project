@@ -10,6 +10,13 @@ export const getArticle = (slug: String, token: String | null) =>
       Authorization: `Bearer ${token}`,
     },
   });
+export const getArticleNoToken = (slug: String) =>
+  axios.get<DataArticle>(`${URL}/api/articles/${slug}`, {
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+
 export const deleteArticle = (slug: String, token: string | null) =>
   axios.delete<DataArticle>(`${URL}/api/articles/${slug}`, {
     headers: {
