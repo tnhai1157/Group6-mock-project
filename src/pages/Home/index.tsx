@@ -121,7 +121,7 @@ export default function Home({ userToken }: { userToken: boolean }) {
       </div>
       <div className="container page">
         <div className="row">
-          <div className="col-md-9">
+          <div className="col-md-9 col-xs-12">
             <div className="feed-toggle">
               <ul className="nav nav-pills outline-active">
                 {token ? (
