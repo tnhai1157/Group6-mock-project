@@ -19,11 +19,11 @@ import SignUp from "./pages/SignUp";
 import GuardedRoute from "./components/Route/GaurdRoute";
 import { saveUserInStore } from "./redux/actions";
 import { userByToken } from "./apis";
-// import { RootState } from ".";
+import { RootState } from ".";
 
 function App() {
   const dispatch = useDispatch();
-  const user = useSelector((state: any) => state?.user?.data);
+  const user = useSelector((state: RootState) => state?.user?.data);
   const [loginState, setLoginState] = useState<boolean>(false);
   const token = window.localStorage.getItem("jwtToken");
 
