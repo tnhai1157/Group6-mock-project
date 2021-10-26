@@ -130,11 +130,12 @@ function Editor(props: InjectedFormikProps<FormProps, FormValues>) {
                   <input
                     type="text"
                     className="form-control"
-                    placeholder="Write your tag"
+                    placeholder={slug ? "Don't change tags" : "Enter tags"}
                     value={input}
                     onKeyDown={onKeyDown}
                     onChange={onChange}
                     onKeyUp={onKeyUp}
+                    disabled={slug ? true : false}
                   />
                   <TagList tags={tags} setTags={setTags} />
                 </fieldset>

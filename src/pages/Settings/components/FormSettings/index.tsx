@@ -3,7 +3,7 @@ import React, { SyntheticEvent, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router";
 import * as Yup from "yup";
-// import { RootState } from "../../../..";
+import { RootState } from "../../../..";
 import { saveUserInStore } from "../../../../redux/actions";
 import { updateUser } from "../../apis";
 import { FormValues, FormProps } from "./interface";
@@ -11,7 +11,7 @@ import { FormValues, FormProps } from "./interface";
 function FormSettings(props: InjectedFormikProps<FormProps, FormValues>) {
   const dispatch = useDispatch();
   const history = useHistory();
-  const user = useSelector((state: any) => state.user.data);
+  const user = useSelector((state: RootState) => state.user.data);
   const { setFieldValue } = props;
 
   useEffect(() => {

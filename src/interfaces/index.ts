@@ -44,10 +44,3 @@ export interface DataArticle {
 export interface DataTags {
   tags: String[];
 }
-
-export interface Profile {
-  username: string;
-  bio?: any;
-  image: string;
-  following: boolean;
-}

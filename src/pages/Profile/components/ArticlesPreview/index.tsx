@@ -4,16 +4,16 @@ import { favoritedArticles, myArticles } from "../../apis";
 import { useRouteMatch } from "react-router-dom";
 import { useSelector } from "react-redux";
 import ArticlePreview from "../../../Home/components/ArticlePreview";
-import { Article } from "../../../../interfaces";
 import { RootState } from "../../../..";
 import { LIMIT } from "../../../../constant";
 import { Row } from "react-bootstrap";
 import Paginate from "../../../../components/Paginate";
+import { Article } from "../../../../interfaces";
 
 export default function ArticlesPreview() {
   const [articles, setArticles] = useState<Article[]>([]);
   const token = window.localStorage.getItem("jwtToken");
-  const user = useSelector((state: RootState) => state.user.data);
+  const user = useSelector((state: any) => state.user.data);
   const { url } = useRouteMatch();
   const [nameApiToLoad, setNameApiToLoad] = useState("My");
 

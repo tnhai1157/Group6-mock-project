@@ -2,7 +2,6 @@ import React from "react";
 import { useSelector } from "react-redux";
 import { useHistory } from "react-router";
 import { RootState } from "../../../..";
-// import { RootState } from "../../../..";
 import { IMG_NOAVATAR } from "../../../../constant";
 
 export default function ProfileInformation() {

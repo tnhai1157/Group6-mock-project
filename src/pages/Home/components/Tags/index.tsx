@@ -12,7 +12,7 @@ export default function Tags({
     getArticlesByTag(tag);
   };
   return (
-    <div className="col-md-3">
+    <div className="col-md-3 col-xs-12">
       <div className="sidebar">
         <p>Popular Tags</p>
         <div className="tag-list">
