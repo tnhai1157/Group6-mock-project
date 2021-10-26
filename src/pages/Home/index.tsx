@@ -27,7 +27,7 @@ export default function Home({ userToken }: { userToken: boolean }) {
   const [tags, setTags] = useState<String[]>([]);
   const [tagName, setTagName] = useState<String>("");
   const token = window.localStorage.getItem("jwtToken");
-  const [nameApiToLoad, setNameApiToLoad] = useState("Your");
+  const [nameApiToLoad, setNameApiToLoad] = useState("Global");
 
   useEffect(() => {
     setOffset(currentPage - 1);
