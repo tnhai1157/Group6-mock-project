@@ -34,7 +34,7 @@ export const favoritedArticles = (
     }
   );
 
-export const getProfile = (token: string | null, username: string) =>
+export const getProfile = (token: any, username: any) =>
   axios.get(`${URL}/api/profiles/${username}`, {
     headers: {
       "Content-Type": "application/json",

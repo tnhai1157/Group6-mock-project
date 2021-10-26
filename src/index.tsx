@@ -12,7 +12,9 @@ import reducers from "./redux/reducers";
 const sagaMiddleware = createSagaMiddleware();
 
 const store = createStore(reducers, applyMiddleware(sagaMiddleware));
+
 export type RootState = ReturnType<typeof store.getState>;
+
 sagaMiddleware.run(mySaga);
 
 ReactDOM.render(

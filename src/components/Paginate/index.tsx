@@ -15,6 +15,7 @@ export default function Paginate({
         key={number}
         active={number === currentPage}
         onClick={() => onSelectPage(number)}
+        activeLabel=""
       >
         {number}
       </Pagination.Item>
@@ -22,7 +23,7 @@ export default function Paginate({
   }
   return (
     <div>
-      <Pagination>
+      <Pagination size="sm">
         {currentPage !== 1 && <Pagination.Prev onClick={handlePrev} />}
         {items}
         {currentPage !== pageNumber && <Pagination.Next onClick={handleNext} />}

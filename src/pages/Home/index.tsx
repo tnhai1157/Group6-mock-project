@@ -10,8 +10,8 @@ import ArticlePreview from "./components/ArticlePreview";
 import Tags from "./components/Tags";
 import {
   getArticleByTag,
-  getArticleByTagNoToken,
   getTags,
+  getArticleByTagNoToken,
 } from "./components/Tags/apis";
 import { Row } from "react-bootstrap";
 import Paginate from "../../components/Paginate";
@@ -27,7 +27,7 @@ export default function Home({ userToken }: { userToken: boolean }) {
   const [tags, setTags] = useState<String[]>([]);
   const [tagName, setTagName] = useState<String>("");
   const token = window.localStorage.getItem("jwtToken");
-  const [nameApiToLoad, setNameApiToLoad] = useState("Your");
+  const [nameApiToLoad, setNameApiToLoad] = useState("Global");
 
   useEffect(() => {
     setOffset(currentPage - 1);
@@ -121,7 +121,7 @@ export default function Home({ userToken }: { userToken: boolean }) {
       </div>
       <div className="container page">
         <div className="row">
-          <div className="col-md-9">
+          <div className="col-md-9 col-xs-12">
             <div className="feed-toggle">
               <ul className="nav nav-pills outline-active">
                 {token ? (

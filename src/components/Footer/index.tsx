@@ -3,7 +3,7 @@ import React from "react";
 export default function Footer() {
   return (
     <footer>
-      <div className="container">
+      <div className="container" style={{ textAlign: "center" }}>
         <a href="/" className="logo-font">
           conduit
         </a>
