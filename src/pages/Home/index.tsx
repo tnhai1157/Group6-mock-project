@@ -178,7 +178,13 @@ export default function Home({ userToken }: { userToken: boolean }) {
             <ArticlePreview feeds={feeds} />
 
             {count > LIMIT && (
-              <Row style={{ display: "flex", justifyContent: "center" }}>
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "center",
+                  width: "100%",
+                }}
+              >
                 <Paginate
                   pageNumber={Math.ceil(count / LIMIT)}
                   currentPage={currentPage}
@@ -186,7 +192,7 @@ export default function Home({ userToken }: { userToken: boolean }) {
                   handlePrev={onPrev}
                   handleNext={onNext}
                 />
-              </Row>
+              </div>
             )}
           </div>
           <Tags tags={tags} getArticlesByTag={getArticlesByTag} />
