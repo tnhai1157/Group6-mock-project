@@ -8,6 +8,7 @@ export default function ArticleItem({ feed }: { feed: Article }) {
   const [likeCount, setLikeCount] = useState<number>(feed?.favoritesCount);
   const [likeState, setLikeState] = useState<boolean>(feed?.favorited);
 
+  console.log(feed);
   const handleLike = (slug: string) => {
     if (token) {
       if (likeState) {
