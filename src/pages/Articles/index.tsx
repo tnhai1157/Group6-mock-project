@@ -145,7 +145,11 @@ export default function Articles() {
                     </button>
                     &nbsp;&nbsp;
                     <button
-                      className="btn btn-sm btn-outline-primary"
+                      className={
+                        likeState
+                          ? "btn btn-sm btn-primary"
+                          : "btn btn-sm btn-outline-primary"
+                      }
                       onClick={() => handleFavorite(article?.slug)}
                     >
                       {likeState ? <i></i> : <i className="ion-heart"></i>}
