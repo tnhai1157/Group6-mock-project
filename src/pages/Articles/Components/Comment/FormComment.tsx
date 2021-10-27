@@ -1,7 +1,10 @@
 import { ChangeEvent, FormEvent, useState } from "react";
+import { useSelector } from "react-redux";
+import { RootState } from "../../../..";
 
 export default function FormComment({ getComment }: { getComment: any }) {
   const [comment, setComment] = useState("");
+  const user = useSelector((state: RootState) => state?.user?.data);
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     if (comment) {
@@ -25,7 +28,11 @@ export default function FormComment({ getComment }: { getComment: any }) {
         </fieldset>
         <div className="card-footer">
           <img
-            src="http://i.imgur.com/Qr71crq.jpg"
+            src={
+              user?.image
+                ? user.image
+                : "https://static.productionready.io/images/smiley-cyrus.jpg"
+            }
             className="comment-author-img"
             alt=""
           />

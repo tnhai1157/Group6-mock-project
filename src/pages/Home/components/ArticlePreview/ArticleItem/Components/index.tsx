@@ -41,7 +41,11 @@ export default function ArticleItem({ feed }: { feed: Article }) {
           <span className="date">{feed?.updatedAt}</span>
         </div>
         <button
-          className="btn btn-outline-primary btn-sm pull-xs-right"
+          className={
+            likeState
+              ? "btn btn-primary btn-sm pull-xs-right"
+              : "btn btn-outline-primary btn-sm pull-xs-right"
+          }
           onClick={() => handleLike(feed?.slug)}
         >
           <i className="ion-heart"></i> {likeCount}
