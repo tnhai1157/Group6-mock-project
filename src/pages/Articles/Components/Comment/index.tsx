@@ -39,13 +39,7 @@ export default function Comment({ slug }: { slug: String }) {
       });
     });
   };
-  const handleEdit = (id: String) => {
-    deleteComment(id, slug, token).then((res: any) => {
-      getComments(slug, token).then((res) => {
-        setComments(res.data.comments);
-      });
-    });
-  };
+
   return (
     <div className="article-page">
       <div className="row">
@@ -58,7 +52,11 @@ export default function Comment({ slug }: { slug: String }) {
               </div>
               <div className="card-footer">
                 <img
-                  src="http://i.imgur.com/Qr71crq.jpg"
+                  src={
+                    comment?.author?.image
+                      ? comment.author.image
+                      : "https://static.productionready.io/images/smiley-cyrus.jpg"
+                  }
                   className="comment-author-img"
                   alt=""
                 />
@@ -73,10 +71,6 @@ export default function Comment({ slug }: { slug: String }) {
                 <span className="date-posted">{comment?.updatedAt}</span>
                 {user?.username == comment?.author?.username ? (
                   <span className="mod-options">
-                    <i
-                      className="ion-edit"
-                      onClick={() => handleEdit(comment?.id)}
-                    ></i>
                     <i
                       className="ion-trash-a"
                       onClick={() => handleDelete(comment?.id)}
