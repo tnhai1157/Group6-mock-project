@@ -30,7 +30,7 @@ export default function Home({ userToken }: { userToken: boolean }) {
   const [nameApiToLoad, setNameApiToLoad] = useState("Global");
 
   useEffect(() => {
-    setOffset(currentPage - 1);
+    setOffset((currentPage - 1) * LIMIT);
   }, [currentPage]);
 
   const handleClickYourFeed = () => {
