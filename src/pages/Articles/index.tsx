@@ -1,8 +1,7 @@
 import { useEffect, useState } from "react";
-import { Route, useHistory, useParams } from "react-router";
+import { useHistory, useParams } from "react-router";
 import { NavLink } from "react-router-dom";
 import { userByToken } from "../../apis";
-import Editor from "../Editor";
 import {
   deleteFavorite,
   postFavorite,
@@ -27,6 +26,7 @@ export default function Articles() {
   const [likeState, setLikeState] = useState<boolean>();
   const history = useHistory();
   const [followState, setFollowState] = useState<boolean>();
+
   useEffect(() => {
     if (token) {
       getArticle(slug, token).then((responseArticle) => {
@@ -53,7 +53,7 @@ export default function Articles() {
         setArticle(res.data.article);
       });
     }
-  }, [slug]);
+  }, [slug, token]);
 
   const handleFavorite = (slug: string) => {
     if (likeState) {
@@ -167,7 +167,7 @@ export default function Articles() {
       </div>
       <div className="container page">
         <div className="row article-content">
-          <div className="col-md-12">
+          <div className="col-xs-12">
             <p>{article?.body}</p>
           </div>
         </div>
