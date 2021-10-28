@@ -55,6 +55,9 @@ function App() {
         <Route path="/login">
           <SignIn />
         </Route>
+        <Route path="/register">
+          <SignUp />
+        </Route>
         <GuardedRoute
           path="/register"
           auth={!window.localStorage.getItem("jwtToken")}

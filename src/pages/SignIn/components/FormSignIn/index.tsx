@@ -29,7 +29,7 @@ function FormLogin(props: InjectedFormikProps<FormProps, FormValues>) {
     <form onSubmit={handleSubmit}>
       <fieldset className="form-group">
         <p className="error-messages">
-          {error && "Email or password is invalid"}
+          {error && "Email or password is incorrect"}
         </p>
         <p className="error-messages">{props.errors.email}</p>
         <input
