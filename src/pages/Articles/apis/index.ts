@@ -1,4 +1,4 @@
-import { Article, DataArticle, DataUser } from "./../../../interfaces/index";
+import { DataArticle, DataUser } from "./../../../interfaces/index";
 import axios from "axios";
 
 const URL = "http://localhost:3000";
