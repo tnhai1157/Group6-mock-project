@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { NavLink } from "react-router-dom";
-import { favoritedArticles, getProfile, myArticles } from "../../apis";
+import { favoritedArticles, myArticles } from "../../apis";
 import { useRouteMatch } from "react-router-dom";
 import { useSelector } from "react-redux";
 import ArticlePreview from "../../../Home/components/ArticlePreview";
@@ -8,7 +8,7 @@ import { RootState } from "../../../..";
 import { LIMIT } from "../../../../constant";
 import { Row } from "react-bootstrap";
 import Paginate from "../../../../components/Paginate";
-import { Article, User } from "../../../../interfaces";
+import { Article } from "../../../../interfaces";
 
 export default function ArticlesPreview({ slug }: { slug: string }) {
   const [articles, setArticles] = useState<Article[]>([]);

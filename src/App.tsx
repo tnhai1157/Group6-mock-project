@@ -58,7 +58,7 @@ function App() {
         <GuardedRoute
           path="/register"
           auth={!window.localStorage.getItem("jwtToken")}
-          Component={Editor}
+          Component={SignUp}
         ></GuardedRoute>
         <GuardedRoute
           exact

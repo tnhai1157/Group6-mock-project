@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { NavLink } from "react-router-dom";
 import { Article } from "../../interfaces";
 import {
@@ -13,7 +13,6 @@ import {
   getTags,
   getArticleByTagNoToken,
 } from "./components/Tags/apis";
-import { Row } from "react-bootstrap";
 import Paginate from "../../components/Paginate";
 import { LIMIT } from "../../constant";
 

@@ -1,6 +1,5 @@
 import { DataArticle } from "./../../../../../../interfaces/index";
 import axios from "axios";
-import { Article } from "../../../../../../interfaces";
 
 const URL = "http://localhost:3000";
 
