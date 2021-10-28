@@ -72,11 +72,13 @@ export default function Articles() {
     if (followState) {
       deleteFollowing(token, username).then((res: any) => {
         // setLikeCount(res.data.article?.favoritesCount);
+
         setFollowState(false);
       });
     } else {
       postFollowing(token, username).then((res: any) => {
         // setLikeCount(res.data.article?.favoritesCount);
+
         setFollowState(true);
       });
     }

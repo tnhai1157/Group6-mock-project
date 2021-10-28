@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { NavLink } from "react-router-dom";
 import { Article } from "../../interfaces";
 import {
@@ -23,9 +23,12 @@ export default function Home({ userToken }: { userToken: boolean }) {
   const [count, setCount] = useState(0);
   const [offset, setOffset] = useState(0);
   const [currentPage, setCurrentPage] = useState<number>(1);
-
+  // loading
+  const [loading, setLoading] = useState(true);
+  //
   const [tags, setTags] = useState<String[]>([]);
   const [tagName, setTagName] = useState<String>("");
+
   const token = window.localStorage.getItem("jwtToken");
   const [nameApiToLoad, setNameApiToLoad] = useState("Global");
 
@@ -34,18 +37,27 @@ export default function Home({ userToken }: { userToken: boolean }) {
   }, [currentPage]);
 
   const handleClickYourFeed = () => {
-    setNameApiToLoad("Your");
-    setTagName("");
+    if (nameApiToLoad !== "Your") {
+      setLoading(true);
+      setNameApiToLoad("Your");
+      setTagName("");
+    }
   };
 
   const handleClickGlobalFeed = () => {
-    setNameApiToLoad("Global");
-    setTagName("");
+    if (nameApiToLoad !== "Global") {
+      setLoading(true);
+      setNameApiToLoad("Global");
+      setTagName("");
+    }
   };
 
   const getArticlesByTag = (tag: String) => {
-    setTagName(tag);
-    setNameApiToLoad("Tags");
+    if (tag !== tagName) {
+      setLoading(true);
+      setTagName(tag);
+      setNameApiToLoad("Tags");
+    }
   };
 
   useEffect(() => {
@@ -54,6 +66,7 @@ export default function Home({ userToken }: { userToken: boolean }) {
         yourArticles(token, offset).then((res) => {
           setFeeds(res.data.articles);
           setCount(res.data.articlesCount);
+          setLoading(false);
         });
         break;
 
@@ -62,11 +75,13 @@ export default function Home({ userToken }: { userToken: boolean }) {
           globalArticles(token, offset).then((res) => {
             setFeeds(res.data.articles);
             setCount(res.data.articlesCount);
+            setLoading(false);
           });
         } else {
           globalArticlesNoToken(offset).then((res) => {
             setFeeds(res.data.articles);
             setCount(res.data.articlesCount);
+            setLoading(false);
           });
         }
         break;
@@ -77,12 +92,14 @@ export default function Home({ userToken }: { userToken: boolean }) {
             setFeeds(res.data.articles);
             setCount(res.data.articlesCount);
             setTagName(tagName);
+            setLoading(false);
           });
         } else {
           getArticleByTagNoToken(tagName).then((res) => {
             setFeeds(res.data.articles);
             setCount(res.data.articlesCount);
             setTagName(tagName);
+            setLoading(false);
           });
         }
         break;
@@ -101,14 +118,17 @@ export default function Home({ userToken }: { userToken: boolean }) {
 
   const onSelectedPage = (pageNum: number) => {
     setCurrentPage(pageNum);
+    setLoading(true);
   };
 
   const onPrev = () => {
     setCurrentPage(currentPage - 1);
+    setLoading(true);
   };
 
   const onNext = () => {
     setCurrentPage(currentPage + 1);
+    setLoading(true);
   };
 
   return (
@@ -175,18 +195,23 @@ export default function Home({ userToken }: { userToken: boolean }) {
                 )}
               </ul>
             </div>
-            <ArticlePreview feeds={feeds} />
-
-            {count > LIMIT && (
-              <Row style={{ display: "flex", justifyContent: "center" }}>
-                <Paginate
-                  pageNumber={Math.ceil(count / LIMIT)}
-                  currentPage={currentPage}
-                  onSelectPage={onSelectedPage}
-                  handlePrev={onPrev}
-                  handleNext={onNext}
-                />
-              </Row>
+            {loading ? (
+              <div>Loading...</div>
+            ) : (
+              <div>
+                <ArticlePreview feeds={feeds} />
+                {count > LIMIT && (
+                  <Row style={{ display: "flex", justifyContent: "center" }}>
+                    <Paginate
+                      pageNumber={Math.ceil(count / LIMIT)}
+                      currentPage={currentPage}
+                      onSelectPage={onSelectedPage}
+                      handlePrev={onPrev}
+                      handleNext={onNext}
+                    />
+                  </Row>
+                )}
+              </div>
             )}
           </div>
           <Tags tags={tags} getArticlesByTag={getArticlesByTag} />
