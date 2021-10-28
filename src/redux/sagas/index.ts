@@ -1,4 +1,4 @@
-import { all, fork } from "redux-saga/effects";
+import { all } from "redux-saga/effects";
 // import watchUpdateUserProcess from "../../pages/Settings/redux/sagas";
 // import watchSignInProcess from "../../pages/SignIn/redux/sagas";
 // import watchSignUpProcess from "../../pages/SignUp/redux/sagas";
