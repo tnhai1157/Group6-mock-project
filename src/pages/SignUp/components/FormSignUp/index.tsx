@@ -24,7 +24,7 @@ function FormSignUp(props: InjectedFormikProps<FormProps, FormValues>) {
         history.push("/");
       })
       .catch((e) => {
-        const errorObject = { ...e.response.data?.errors };
+        const errorObject = { ...e.response?.data?.errors };
         setError(errorObject);
       });
   };

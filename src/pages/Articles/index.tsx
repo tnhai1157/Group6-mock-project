@@ -1,8 +1,7 @@
 import { useEffect, useState } from "react";
-import { Route, useHistory, useParams } from "react-router";
+import { useHistory, useParams } from "react-router";
 import { NavLink } from "react-router-dom";
 import { userByToken } from "../../apis";
-import Editor from "../Editor";
 import {
   deleteFavorite,
   postFavorite,
@@ -17,6 +16,7 @@ import {
 } from "./apis";
 import { AxiosResponse } from "axios";
 import Comment from "./Components/Comment";
+import AlertDialog from "../../components/Modals/AlertDialog";
 
 export default function Articles() {
   const { slug }: any = useParams();
@@ -25,8 +25,10 @@ export default function Articles() {
   const [checkAuthor, setCheckAuthor] = useState(false);
   const [likeCount, setLikeCount] = useState<number>(article?.favoritesCount);
   const [likeState, setLikeState] = useState<boolean>();
-  const history = useHistory();
   const [followState, setFollowState] = useState<boolean>();
+  const [open, setOpen] = useState(false);
+  const history = useHistory();
+
   useEffect(() => {
     if (token) {
       getArticle(slug, token).then((responseArticle) => {
@@ -53,7 +55,7 @@ export default function Articles() {
         setArticle(res.data.article);
       });
     }
-  }, [slug]);
+  }, [slug, token]);
 
   const handleFavorite = (slug: string) => {
     if (likeState) {
@@ -82,13 +84,30 @@ export default function Articles() {
     }
   };
   const handleDelete = () => {
+    setOpen(true);
+  };
+
+  const handleAgree = () => {
     deleteArticle(slug, token).then((res) => {
       history.push("");
     });
+    handleClose();
+  };
+
+  const handleClose = () => {
+    setOpen(false);
   };
 
   return (
     <div className="article-page">
+      <AlertDialog
+        open={open}
+        setOpen={setOpen}
+        slug={slug}
+        token={token}
+        handleAgree={handleAgree}
+        handleClose={handleClose}
+      />
       <div className="banner">
         <div className="container">
           <h1>{article?.title}</h1>
@@ -167,7 +186,7 @@ export default function Articles() {
       </div>
       <div className="container page">
         <div className="row article-content">
-          <div className="col-md-12">
+          <div className="col-xs-12">
             <p>{article?.body}</p>
           </div>
         </div>
