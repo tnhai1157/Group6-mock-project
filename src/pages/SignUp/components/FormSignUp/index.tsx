@@ -1,7 +1,7 @@
-import React, { SyntheticEvent, useEffect, useState } from "react";
+import { SyntheticEvent, useState } from "react";
 import { withFormik, InjectedFormikProps } from "formik";
 import * as Yup from "yup";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { useHistory } from "react-router-dom";
 import { postUserSignUp } from "../../apis";
 import { saveUserInStore } from "../../../../redux/actions";
