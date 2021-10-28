@@ -1,11 +1,11 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { useHistory } from "react-router";
 import { RootState } from "../../../..";
 import { IMG_NOAVATAR } from "../../../../constant";
 import { User } from "../../../../interfaces";
 import { deleteFollowing, postFollowing } from "../../../Articles/apis";
-import { getProfile, getProfileNoToken } from "../../apis";
+import { getProfile } from "../../apis";
 
 export default function ProfileInformation({ slug }: { slug: string }) {
   const user = useSelector((state: RootState) => state.user.data);
