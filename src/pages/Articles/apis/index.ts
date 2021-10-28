@@ -1,4 +1,4 @@
-import { Article, DataArticle } from "./../../../interfaces/index";
+import { Article, DataArticle, DataUser } from "./../../../interfaces/index";
 import axios from "axios";
 
 const URL = "http://localhost:3000";
@@ -26,7 +26,7 @@ export const deleteArticle = (slug: String, token: string | null) =>
   });
 
 export const postFollowing = (token: any, username: any) =>
-  axios.post(
+  axios.post<DataUser>(
     `${URL}/api/profiles/${username}/follow`,
     {
       "Access-Control-Allow-Origin": "*",

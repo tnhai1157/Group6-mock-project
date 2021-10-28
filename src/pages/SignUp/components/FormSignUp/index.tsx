@@ -18,13 +18,13 @@ function FormSignUp(props: InjectedFormikProps<FormProps, FormValues>) {
 
     postUserSignUp({ username, email, password })
       .then((res) => {
-        const user = res.data.user;
+        const user = res.data?.user;
         dispatch(saveUserInStore.saveUserInStoreSuccess(user));
         window.localStorage.setItem("jwtToken", user.token);
         history.push("/");
       })
       .catch((e) => {
-        const errorObject = { ...e.response.data.errors };
+        const errorObject = { ...e.response?.data?.errors };
         setError(errorObject);
       });
   };

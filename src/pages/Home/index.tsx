@@ -33,7 +33,7 @@ export default function Home({ userToken }: { userToken: boolean }) {
   const [nameApiToLoad, setNameApiToLoad] = useState("Global");
 
   useEffect(() => {
-    setOffset(currentPage - 1);
+    setOffset((currentPage - 1) * LIMIT);
   }, [currentPage]);
 
   const handleClickYourFeed = () => {
@@ -41,6 +41,7 @@ export default function Home({ userToken }: { userToken: boolean }) {
       setLoading(true);
       setNameApiToLoad("Your");
       setTagName("");
+      setCurrentPage(1);
     }
   };
 
@@ -49,6 +50,7 @@ export default function Home({ userToken }: { userToken: boolean }) {
       setLoading(true);
       setNameApiToLoad("Global");
       setTagName("");
+      setCurrentPage(1);
     }
   };
 
@@ -57,6 +59,7 @@ export default function Home({ userToken }: { userToken: boolean }) {
       setLoading(true);
       setTagName(tag);
       setNameApiToLoad("Tags");
+      setCurrentPage(1);
     }
   };
 
@@ -88,14 +91,14 @@ export default function Home({ userToken }: { userToken: boolean }) {
 
       case "Tags":
         if (token) {
-          getArticleByTag(tagName, token).then((res) => {
+          getArticleByTag(tagName, token, offset).then((res) => {
             setFeeds(res.data.articles);
             setCount(res.data.articlesCount);
             setTagName(tagName);
             setLoading(false);
           });
         } else {
-          getArticleByTagNoToken(tagName).then((res) => {
+          getArticleByTagNoToken(tagName, offset).then((res) => {
             setFeeds(res.data.articles);
             setCount(res.data.articlesCount);
             setTagName(tagName);
@@ -201,7 +204,13 @@ export default function Home({ userToken }: { userToken: boolean }) {
               <div>
                 <ArticlePreview feeds={feeds} />
                 {count > LIMIT && (
-                  <Row style={{ display: "flex", justifyContent: "center" }}>
+                  <div
+                    style={{
+                      display: "flex",
+                      justifyContent: "center",
+                      width: "100%",
+                    }}
+                  >
                     <Paginate
                       pageNumber={Math.ceil(count / LIMIT)}
                       currentPage={currentPage}
@@ -209,7 +218,7 @@ export default function Home({ userToken }: { userToken: boolean }) {
                       handlePrev={onPrev}
                       handleNext={onNext}
                     />
-                  </Row>
+                  </div>
                 )}
               </div>
             )}

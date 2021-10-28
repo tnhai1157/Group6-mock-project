@@ -60,9 +60,6 @@ function App() {
           auth={!window.localStorage.getItem("jwtToken")}
           Component={Editor}
         ></GuardedRoute>
-        {/* <Route path="/register">
-          <SignUp />
-        </Route> */}
         <GuardedRoute
           exact
           path="/editor"
@@ -80,12 +77,7 @@ function App() {
           Component={Settings}
         ></GuardedRoute>
         <GuardedRoute
-          path={`/profile`}
-          auth={window.localStorage.getItem("jwtToken")}
-          Component={Profile}
-        ></GuardedRoute>
-        <GuardedRoute
-          path={`/profile/${user.username}`}
+          path={`/profile/:slug`}
           auth={window.localStorage.getItem("jwtToken")}
           Component={Profile}
         ></GuardedRoute>

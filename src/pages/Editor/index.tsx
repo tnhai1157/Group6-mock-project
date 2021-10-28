@@ -44,11 +44,12 @@ function Editor(props: InjectedFormikProps<FormProps, FormValues>) {
         setFieldValue("content", article.body);
         setTags(article.tagList);
       });
-    } else {
-      setFieldValue("title", "");
-      setFieldValue("description", "");
-      setFieldValue("content", "");
     }
+    // else {
+    //   setFieldValue("title", "");
+    //   setFieldValue("description", "");
+    //   setFieldValue("content", "");
+    // }
   }, [slug, setFieldValue]);
 
   const onKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
@@ -135,7 +136,6 @@ function Editor(props: InjectedFormikProps<FormProps, FormValues>) {
                     onKeyDown={onKeyDown}
                     onChange={onChange}
                     onKeyUp={onKeyUp}
-                    disabled={slug ? true : false}
                   />
                   <TagList tags={tags} setTags={setTags} />
                 </fieldset>
