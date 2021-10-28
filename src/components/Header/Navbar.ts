@@ -50,6 +50,17 @@ export const Navbar = styled.div`
   }
 
   @media screen and (max-width: 756px) {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    background-color: white;
+    &:after {
+      top: 60px;
+    }
+
+    z-index: 1;
+
     .NavbarItems {
       position: relative;
     }
