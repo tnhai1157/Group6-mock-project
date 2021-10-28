@@ -16,6 +16,7 @@ import {
 } from "./apis";
 import { AxiosResponse } from "axios";
 import Comment from "./Components/Comment";
+import AlertDialog from "../../components/Modals/AlertDialog";
 
 export default function Articles() {
   const { slug }: any = useParams();
@@ -24,8 +25,9 @@ export default function Articles() {
   const [checkAuthor, setCheckAuthor] = useState(false);
   const [likeCount, setLikeCount] = useState<number>(article?.favoritesCount);
   const [likeState, setLikeState] = useState<boolean>();
-  const history = useHistory();
   const [followState, setFollowState] = useState<boolean>();
+  const [open, setOpen] = useState(false);
+  const history = useHistory();
 
   useEffect(() => {
     if (token) {
@@ -82,13 +84,30 @@ export default function Articles() {
     }
   };
   const handleDelete = () => {
+    setOpen(true);
+  };
+
+  const handleAgree = () => {
     deleteArticle(slug, token).then((res) => {
       history.push("");
     });
+    handleClose();
+  };
+
+  const handleClose = () => {
+    setOpen(false);
   };
 
   return (
     <div className="article-page">
+      <AlertDialog
+        open={open}
+        setOpen={setOpen}
+        slug={slug}
+        token={token}
+        handleAgree={handleAgree}
+        handleClose={handleClose}
+      />
       <div className="banner">
         <div className="container">
           <h1>{article?.title}</h1>
