@@ -21,16 +21,22 @@ export default function ArticlesPreview({ slug }: { slug: string }) {
   const [offset, setOffset] = useState(0);
   const [currentPage, setCurrentPage] = useState<number>(1);
 
+  const [loading, setLoading] = useState(true);
+
   useEffect(() => {
     setOffset((currentPage - 1) * LIMIT);
   }, [currentPage]);
 
   const handleClickYourFeed = () => {
     setSelected("My");
+    setLoading(true);
+    setCurrentPage(1);
   };
 
   const handleClickGlobalFeed = () => {
     setSelected("Favorited");
+    setLoading(true);
+    setCurrentPage(1);
   };
 
   useEffect(() => {
@@ -39,6 +45,7 @@ export default function ArticlesPreview({ slug }: { slug: string }) {
         myArticles(slug, token, offset).then((res) => {
           setArticles(res.data.articles);
           setCount(res.data.articlesCount);
+          setLoading(false);
         });
         break;
 
@@ -46,6 +53,7 @@ export default function ArticlesPreview({ slug }: { slug: string }) {
         favoritedArticles(slug, token, offset).then((res) => {
           setArticles(res.data.articles);
           setCount(res.data.articlesCount);
+          setLoading(false);
         });
         break;
 
@@ -56,14 +64,17 @@ export default function ArticlesPreview({ slug }: { slug: string }) {
 
   const onSelectedPage = (pageNum: number) => {
     setCurrentPage(pageNum);
+    setLoading(true);
   };
 
   const onPrev = () => {
     setCurrentPage(currentPage - 1);
+    setLoading(true);
   };
 
   const onNext = () => {
     setCurrentPage(currentPage + 1);
+    setLoading(true);
   };
 
   return (
@@ -104,17 +115,23 @@ export default function ArticlesPreview({ slug }: { slug: string }) {
               </li>
             </ul>
           </div>
-          <ArticlePreview feeds={articles} />
-          {count > LIMIT && (
-            <Row style={{ display: "flex", justifyContent: "center" }}>
-              <Paginate
-                pageNumber={Math.ceil(count / LIMIT)}
-                currentPage={currentPage}
-                onSelectPage={onSelectedPage}
-                handlePrev={onPrev}
-                handleNext={onNext}
-              />
-            </Row>
+          {loading ? (
+            <div>Loading...</div>
+          ) : (
+            <div>
+              <ArticlePreview feeds={articles} />
+              {count > LIMIT && (
+                <Row style={{ display: "flex", justifyContent: "center" }}>
+                  <Paginate
+                    pageNumber={Math.ceil(count / LIMIT)}
+                    currentPage={currentPage}
+                    onSelectPage={onSelectedPage}
+                    handlePrev={onPrev}
+                    handleNext={onNext}
+                  />
+                </Row>
+              )}
+            </div>
           )}
         </div>
       </div>

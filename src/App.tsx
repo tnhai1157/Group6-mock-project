@@ -48,16 +48,12 @@ function App() {
   return (
     <Router>
       <Header userToken={loginState} />
-      {/* <Navbar /> */}
       <Switch>
         <Route exact path="/">
           <Home userToken={loginState} />
         </Route>
         <Route path="/login">
           <SignIn />
-        </Route>
-        <Route path="/register">
-          <SignUp />
         </Route>
         <GuardedRoute
           path="/register"
@@ -80,11 +76,6 @@ function App() {
           auth={window.localStorage.getItem("jwtToken")}
           Component={Settings}
         ></GuardedRoute>
-        {/* <GuardedRoute
-          path={`/profile`}
-          auth={window.localStorage.getItem("jwtToken")}
-          Component={Profile}
-        ></GuardedRoute> */}
         <GuardedRoute
           path={`/profile/:slug`}
           auth={window.localStorage.getItem("jwtToken")}
