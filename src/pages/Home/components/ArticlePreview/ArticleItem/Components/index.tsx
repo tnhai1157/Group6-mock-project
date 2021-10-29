@@ -43,8 +43,8 @@ export default function ArticleItem({ feed }: { feed: Article }) {
         <button
           className={
             likeState
-              ? "btn btn-primary btn-sm pull-xs-right"
-              : "btn btn-outline-primary btn-sm pull-xs-right"
+              ? "btn btn-sm btn-primary"
+              : "btn btn-sm btn-outline-primary"
           }
           onClick={() => handleLike(feed?.slug)}
         >

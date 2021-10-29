@@ -22,6 +22,9 @@ code {
     top: 60px;
     margin-bottom: 60px;
   }
+  .article-page {
+    padding-bottom: 30px;
+  }
   .headerCustom {
     position: fixed;
     top: 0;
