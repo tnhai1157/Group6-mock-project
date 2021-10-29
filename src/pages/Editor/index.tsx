@@ -120,7 +120,7 @@ function Editor(props: InjectedFormikProps<FormProps, FormValues>) {
                   <input
                     type="text"
                     className="form-control"
-                    placeholder={slug ? "Don't change tags" : "Enter tags"}
+                    placeholder={"Enter tags"}
                     value={input}
                     onKeyDown={onKeyDown}
                     onChange={onChange}

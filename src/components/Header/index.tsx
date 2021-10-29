@@ -74,7 +74,7 @@ export default function Header({ userToken }: { userToken: boolean }) {
       </nav>
     </Navbar>
   ) : (
-    <div>
+    <div className="headerCustom">
       {" "}
       <nav className="navbar navbar-light">
         <div className="container">

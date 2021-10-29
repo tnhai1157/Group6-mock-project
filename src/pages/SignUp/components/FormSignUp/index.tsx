@@ -10,7 +10,7 @@ import { FormProps, FormValues } from "./interface";
 function FormSignUp(props: InjectedFormikProps<FormProps, FormValues>) {
   const dispatch = useDispatch();
   const history = useHistory();
-  const [error, setError] = useState();
+  const [error, setError] = useState<any>();
 
   const handleSubmit = (e: SyntheticEvent) => {
     e.preventDefault();
@@ -25,7 +25,12 @@ function FormSignUp(props: InjectedFormikProps<FormProps, FormValues>) {
       })
       .catch((e) => {
         const errorObject = { ...e.response?.data?.errors };
-        setError(errorObject);
+        if (errorObject.hasOwnProperty("username")) setError(errorObject);
+        else {
+          if (errorObject.error?.keyPattern.hasOwnProperty("username"))
+            setError({ errors: "Username is already taken" });
+          else setError({ errors: "Email is already taken" });
+        }
       });
   };
 
@@ -36,9 +41,7 @@ function FormSignUp(props: InjectedFormikProps<FormProps, FormValues>) {
           Object.keys(error).map((obj, i) => {
             return (
               <div key={i}>
-                <p className="error-messages">
-                  {obj} {error[obj]}
-                </p>
+                <p className="error-messages">* {error[obj]}</p>
               </div>
             );
           })}

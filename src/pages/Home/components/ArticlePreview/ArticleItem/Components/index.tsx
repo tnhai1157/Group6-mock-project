@@ -23,6 +23,7 @@ export default function ArticleItem({ feed }: { feed: Article }) {
       }
     }
   };
+
   return (
     <div className="article-preview">
       <div className="article-meta">
@@ -40,22 +41,27 @@ export default function ArticleItem({ feed }: { feed: Article }) {
           </NavLink>
           <span className="date">{feed?.updatedAt}</span>
         </div>
-        <button
-          className={
-            likeState
-              ? "btn btn-primary btn-sm pull-xs-right"
-              : "btn btn-outline-primary btn-sm pull-xs-right"
-          }
-          onClick={() => handleLike(feed?.slug)}
-        >
-          <i className="ion-heart"></i> {likeCount}
-        </button>
+        {likeState ? (
+          <button
+            className="btn btn-primary btn-sm pull-xs-right "
+            onClick={() => handleLike(feed?.slug)}
+          >
+            <i className="ion-heart"></i> {likeCount}
+          </button>
+        ) : (
+          <button
+            className="btn btn-outline-primary btn-sm pull-xs-right "
+            onClick={() => handleLike(feed?.slug)}
+          >
+            <i className="ion-heart"></i> {likeCount}
+          </button>
+        )}
       </div>
       <div className="preview-link">
         <h1>{feed?.title}</h1>
         <p>{feed?.description}</p>
-        <NavLink to={"/article/" + feed?.slug} className="preview-link">
-          Read more...
+        <NavLink to={"/article/" + feed?.slug}>
+          <span>Read more...</span>
         </NavLink>
         <ul className="tag-list">
           {feed.tagList?.map((tag, i) => (
