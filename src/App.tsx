@@ -52,12 +52,11 @@ function App() {
         <Route exact path="/">
           <Home userToken={loginState} />
         </Route>
-        <Route path="/login">
-          <SignIn />
-        </Route>
-        <Route path="/register">
-          <SignUp />
-        </Route>
+        <GuardedRoute
+          path="/login"
+          auth={!window.localStorage.getItem("jwtToken")}
+          Component={SignIn}
+        ></GuardedRoute>
         <GuardedRoute
           path="/register"
           auth={!window.localStorage.getItem("jwtToken")}

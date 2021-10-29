@@ -21,7 +21,7 @@ function FormSettings(props: InjectedFormikProps<FormProps, FormValues>) {
     setFieldValue("email", user.email);
   }, [user, setFieldValue]);
 
-  const [error, setError] = useState();
+  const [error, setError] = useState<any>();
   const token = window.localStorage.getItem("jwtToken");
 
   const handleSubmit = (e: SyntheticEvent) => {
@@ -35,8 +35,13 @@ function FormSettings(props: InjectedFormikProps<FormProps, FormValues>) {
         history.push(`/profile/${user.username}`);
       })
       .catch((e) => {
-        const errorObject = { ...e.response.data.errors };
-        setError(errorObject);
+        const errorObject = { ...e.response?.data?.errors };
+        if (errorObject.hasOwnProperty("username")) setError(errorObject);
+        else {
+          if (errorObject.error?.keyPattern.hasOwnProperty("username"))
+            setError({ errors: "Username is already taken" });
+          else setError({ errors: "Email is already taken" });
+        }
       });
   };
 
