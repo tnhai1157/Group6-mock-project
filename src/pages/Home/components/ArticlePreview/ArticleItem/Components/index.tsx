@@ -54,8 +54,8 @@ export default function ArticleItem({ feed }: { feed: Article }) {
       <div className="preview-link">
         <h1>{feed?.title}</h1>
         <p>{feed?.description}</p>
-        <NavLink to={"/article/" + feed?.slug} className="preview-link">
-          Read more...
+        <NavLink to={"/article/" + feed?.slug}>
+          <span>Read more...</span>
         </NavLink>
         <ul className="tag-list">
           {feed.tagList?.map((tag, i) => (
